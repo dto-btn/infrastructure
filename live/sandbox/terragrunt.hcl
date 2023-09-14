@@ -8,12 +8,12 @@ generate "terraform" {
   contents  = file("../common/terraform.tf")
 }
 
+# the two providers here are needed since we have a data block in a different env (ScDC), this is temporary.
 generate "provider" {
     path      = "provider.tf"
     if_exists = "overwrite"
     contents = <<EOF
 provider "azurerm" {
-  alias = "sandbox"
   subscription_id = "${local.config.sandbox.subscription_id}"
   tenant_id       = "${local.config.sandbox.tenant_id}"
   client_id       = "${local.config.sandbox.client_id}"
@@ -38,10 +38,6 @@ provider "azurerm" {
       prevent_deletion_if_contains_resources = true
     }
   }
-}
-
-provider "azurerm" {
-  features {}
 }
 EOF
 }

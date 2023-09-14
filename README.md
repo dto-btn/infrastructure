@@ -48,7 +48,7 @@ But all variables below can also be defined in the environments with prefix `TF_
 
 ```
 personal_token="<github-secret-to-pull>"
-microsoft_provider_authentication_secret="<secret>"
+microsoft_provider_authentication_secret="<provided-by-infra-team-secret>"
 ```
 
 You also need to create at the root a `config.hcl` file and populate the following content: 
