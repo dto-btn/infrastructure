@@ -1,10 +1,10 @@
 # infrastructure
 General infrastructure of DTO team.
 
-This is split by environements, and we currently only have environements in Azure, 
-so we use their zoning to group project/modules togheter.
+This is split by environments, and we currently only have environments in Azure, 
+so we use their zoning to group project/modules together.
 
-The 3 main environements at SSC inside Azure: 
+The 3 main environments at SSC inside Azure: 
 
 * Sandbox (`ScSc`),
 * Dev (`ScDc`),

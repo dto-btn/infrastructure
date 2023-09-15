@@ -51,7 +51,8 @@ terraform {
             "import",
             "plan",
             "taint",
-            "untaint"
+            "untaint",
+            "destroy"
         ]
 
         env_vars = {

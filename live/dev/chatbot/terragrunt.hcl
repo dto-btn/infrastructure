@@ -1,5 +1,5 @@
 terraform {
-    source = "git::git@github.com:dto-btn/chatbot-infra.git//chatbot?ref=v1.0.1"
+    source = "git::git@github.com:dto-btn/chatbot-infra.git//chatbot?ref=v1.0.2"
 }
 
 inputs = {
