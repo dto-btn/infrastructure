@@ -14,28 +14,14 @@ generate "provider" {
     if_exists = "overwrite"
     contents = <<EOF
 provider "azurerm" {
-  subscription_id = "${local.config.sandbox.subscription_id}"
-  tenant_id       = "${local.config.sandbox.tenant_id}"
-  client_id       = "${local.config.sandbox.client_id}"
-  client_secret   = "${local.config.sandbox.client_secret}"
+  subscription_id = "${local.config.sandbox-ect.subscription_id}"
+  tenant_id       = "${local.config.sandbox-ect.tenant_id}"
+  client_id       = "${local.config.sandbox-ect.client_id}"
+  client_secret   = "${local.config.sandbox-ect.client_secret}"
 
   features {
     resource_group {
       prevent_deletion_if_contains_resources = false
-    }
-  }
-}
-
-provider "azurerm" {
-  alias = "dev"
-  subscription_id = "${local.config.dev.subscription_id}"
-  tenant_id       = "${local.config.dev.tenant_id}"
-  client_id       = "${local.config.dev.client_id}"
-  client_secret   = "${local.config.dev.client_secret}"
-
-  features {
-    resource_group {
-      prevent_deletion_if_contains_resources = true
     }
   }
 }
@@ -56,10 +42,9 @@ terraform {
         ]
 
         env_vars = {
-            ARM_SUBSCRIPTION_ID     = local.config.sandbox.subscription_id
+            ARM_SUBSCRIPTION_ID     = local.config.sandbox-ect.subscription_id
         }
-
-        required_var_files = [ "${get_repo_root()}/secret.tfvars" ]
+        #required_var_files = [ "${get_repo_root()}/secret.tfvars" ]
     }
 }
 
@@ -67,8 +52,8 @@ remote_state {
     backend = "azurerm"
     config = {
         key = "${path_relative_to_include()}/terraform.tfstate"
-        resource_group_name = "ScSc-CIO-DTO-Infrastructure-rg"
-        storage_account_name = "scscinfrastructure"
+        resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
+        storage_account_name = "ectinfra"
         container_name = "tfstate"
     }
     generate = {
@@ -79,6 +64,6 @@ remote_state {
 
 inputs = {
     env = "Sandbox"
-    name_prefix = "ScSc-CIO"
-    name_prefix_lowercase = "scsccio"
+    name_prefix = "ScSc-CIO_ECT"
+    name_prefix_lowercase = "scsccioect"
 }
