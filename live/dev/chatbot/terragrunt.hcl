@@ -1,5 +1,5 @@
 terraform {
-    source = "git::git@github.com:dto-btn/chatbot-infra.git//chatbot?ref=v1.0.2"
+    source = "git::git@github.com:dto-btn/chatbot-infra.git//chatbot?ref=v1.0.3"
 }
 
 inputs = {
@@ -10,14 +10,18 @@ inputs = {
     project_name_short_lowercase = "oaichat"
 
     # the python api version (one that talks to Azure OpenAI)
-    api_version = "3.0.5"
-    api_version_sha = "1c88ac7d4d3d40ddf46451de4c22d9af2d20dff2"
+    api_version = "3.0.6"
+    api_version_sha = "4b3e6bd2d272f8a90c67e1a99ae647e2f3fb6572"
 
     env = "Pilot" # override of Dev
     enable_auth = true
 
     name_prefix = "ScDc-CIO"
     name_prefix_lowercase = "scdccio"
+
+    openai_endpoint_name = "scsc-cio-ect-openai-oai"
+    openai_key_name = "scsc-cio-ect-openai-oai"
+    openai_deployment_name = "gpt-4" # or gpt-35-turbo-16k
 }
 
 locals {
