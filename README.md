@@ -51,7 +51,7 @@ personal_token="<github-secret-to-pull>"
 microsoft_provider_authentication_secret="<provided-by-infra-team-secret>"
 ```
 
-You also need to create at the root a `config.hcl` file and populate the following content: 
+You also need to create at the root of the repo a `local-secrets.hcl` file and populate the following content: 
 
 (subscription ids are considered non sensitive but in this case we are taking an extra precaution)
 
