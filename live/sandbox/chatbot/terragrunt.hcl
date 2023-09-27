@@ -1,5 +1,5 @@
 terraform {
-    source = "git::git@github.com:dto-btn/chatbot-infra.git//chatbot?ref=v1.0.3"
+    source = "git::git@github.com:dto-btn/chatbot-infra.git//chatbot?ref=v1.0.4"
 
     extra_arguments "set-subscription-and-secrets" {
         commands = [
