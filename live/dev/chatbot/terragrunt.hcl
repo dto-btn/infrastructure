@@ -29,8 +29,8 @@ inputs = {
     project_name_short_lowercase = "oaichat"
 
     # the python api version (one that talks to Azure OpenAI)
-    api_version = "3.0.7"
-    api_version_sha = "97de027cc22700b545e921737f44fb9f3351735c"  
+    api_version = "3.0.8"
+    api_version_sha = "73bac9f7fc5ee7c4414558dc7a76ea0bc1dc1cb4"
 
     env = "Pilot" # override of Dev
     enable_auth = true
@@ -42,7 +42,6 @@ inputs = {
     #openai_key_name = "AzureOpenAIKey"
     openai_endpoint_name = "scsc-cio-ect-openai-oai"
     openai_key_name = "scsc-cio-ect-openai-oai"
-    openai_deployment_name = "gpt-35-turbo-16k" # or gpt-4
 }
 
 locals {
