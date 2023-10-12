@@ -37,5 +37,5 @@ terraform.rc
 
 indices/*
 
-local.hcl
+local-secrets.hcl
 *-secrets.hcl
