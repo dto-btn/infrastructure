@@ -6,6 +6,8 @@ terraform {
 inputs = {
     project_name = "SSCPlusData"
     project_name_short = "SSCPlusData"
+    openai_name = "ScSc-CIO-ECT-OpenAI-oai"
+    openai_rg = "ScSc-CIO-ECT-OpenAI-rg"
 }
 
  include "root" {
