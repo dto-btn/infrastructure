@@ -29,8 +29,8 @@ inputs = {
     project_name_short_lowercase = "oaichat"
 
     # the python api version (one that talks to Azure OpenAI)
-    api_version = "3.0.9"
-    api_version_sha = "4a713544aa1bee11342eeb9057de393046cce412"
+    api_version = "3.1.0"
+    api_version_sha = "f5b4938570cad4e903207d36f8d6c1cbd3133c58"
 
     env = "Pilot" # override of Dev
     enable_auth = true
