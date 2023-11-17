@@ -29,8 +29,8 @@ inputs = {
     project_name_short_lowercase = "oaichatsb"
 
     # the python api version (one that talks to Azure OpenAI)
-    api_version = "3.1.0"
-    api_version_sha = "f5b4938570cad4e903207d36f8d6c1cbd3133c58"
+    api_version = "3.1.1"
+    api_version_sha = "ea59aa1468524dfa936a7dc013774230b6c0f2f7"
 
     frontend_branch_name = "preview"
 
