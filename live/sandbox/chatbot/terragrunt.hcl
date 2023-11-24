@@ -29,8 +29,8 @@ inputs = {
     project_name_short_lowercase = "oaichatsb"
 
     # the python api version (one that talks to Azure OpenAI)
-    api_version = "3.1.1"
-    api_version_sha = "ea59aa1468524dfa936a7dc013774230b6c0f2f7"
+    api_version = "3.1.2"
+    api_version_sha = "2fd7ae0c9b29448922861d89d74fb43695830c1b"
 
     frontend_branch_name = "preview"
 
@@ -43,7 +43,7 @@ inputs = {
     openai_endpoint_name = "scsc-cio-ect-openai-oai"
     openai_key_name = "scsc-cio-ect-openai-oai"
 
-    index_name = "2023-11-01"
+    index_name = "2023-11-24"
 }
 
 locals {
