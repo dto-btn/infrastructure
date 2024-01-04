@@ -29,8 +29,8 @@ inputs = {
     project_name_short_lowercase = "oaichat"
 
     # the python api version (one that talks to Azure OpenAI)
-    api_version = "3.1.2"
-    api_version_sha = "2fd7ae0c9b29448922861d89d74fb43695830c1b"
+    api_version = "3.1.3"
+    api_version_sha = "25839c7eada66ab9b95ca9bba081c6a1d7e32d30"
 
     env = "Pilot" # override of Dev
     enable_auth = true
@@ -43,7 +43,7 @@ inputs = {
     openai_endpoint_name = "scsc-cio-ect-openai-oai"
     openai_key_name = "scsc-cio-ect-openai-oai"
 
-    index_name = "2023-11-24"
+    index_name = "latest"
 }
 
 locals {
