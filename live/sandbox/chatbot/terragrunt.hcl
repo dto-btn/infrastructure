@@ -1,5 +1,5 @@
 terraform {
-    source = "git::git@github.com:dto-btn/chatbot-infra.git//chatbot?ref=v1.0.6"
+    source = "git::git@github.com:dto-btn/chatbot-infra.git//chatbot?ref=v1.0.7"
 
     extra_arguments "set-subscription-and-secrets" {
         commands = [
@@ -29,7 +29,7 @@ inputs = {
     project_name_short_lowercase = "oaichatsb"
 
     # the python api version (one that talks to Azure OpenAI)
-    api_version = "3.1.2"
+    api_version = "3.1.3"
     api_version_sha = "25839c7eada66ab9b95ca9bba081c6a1d7e32d30"
 
     frontend_branch_name = "preview"
