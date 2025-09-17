@@ -16,6 +16,7 @@ So we end up with this structure:
   * `dev`
     * `chatbot`
     * `projectB`
+    * `SSCA-MCP`
   * `sandbox`
     * `chatbot`
     * `projectC`
@@ -30,10 +31,10 @@ In order to run a specific subset (for instance, I want to setup chatbot in sand
 
 ```bash
 cd live/sandbox/chatbot
-terragrunt plan --terragrunt-source ~/git/chatbot-infra/chatbot
+terragrunt plan
 ```
 
-Ignore `--terragrunt-source` if you would rather use the true `source` value from the `terraform` block in the `terragrunt.hcl` (in most case, remote github source)
+Note: Use `--terragrunt-source ~/git/chatbot-infra/chatbot` if you would rather use the local `source` value from the `terraform` block in the `terragrunt.hcl` (in most case, remote github source)
 
 ### pre-requisites
 
@@ -44,7 +45,7 @@ You will need those tools:
 * az client
 
 And make sure you have created a `secret.tfvars` at the root folder and populate it with the following..
-But all variables below can also be defined in the environments with prefix `TF_VAR_` instead (ex: `TF_VAR_dev_sub_id`).
+But all variables below can also be defined in the system environment variables with prefix `TF_VAR_` instead (ex: `TF_VAR_dev_sub_id`).
 
 ```
 personal_token="<github-secret-to-pull>"
