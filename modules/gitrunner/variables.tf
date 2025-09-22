@@ -21,3 +21,44 @@ variable "acr_name" {
 variable "user_assigned_identity_name" {
     type = string
 }
+
+variable "github_repo_name" {
+    type = string
+}
+
+variable "github_repo_owner" {
+    type = string
+}
+
+variable "runner_scope" {
+    type = string
+    default = "repo"
+}
+
+variable "acr_repo_name" {
+    type = string
+}
+
+variable "acr_image_env_var" {
+    type = list(object({
+        name = string
+        value = optional(string)
+        secretRef = optional(string)
+    }))
+}
+# example 
+# "env": [
+#     {
+#         "name": "GITHUB_PAT",
+#         "secretRef": "personal-access-token"
+#     },
+#     {
+#         "name": "GH_URL",
+#         "value": "https://github.com/dto-btn/tfrunnertest"
+#     },
+#     {
+#         "name": "REGISTRATION_TOKEN_API_URL",
+#         "value": "https://api.github.com/repos/dto-btn/tfrunnertest/actions/runners/registration-token"
+#     }
+# ]
+

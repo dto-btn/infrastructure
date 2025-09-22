@@ -10,7 +10,7 @@ resource "azurerm_log_analytics_workspace" "logAnalytics" {
   retention_in_days   = 30
 }
 
-resource "azurerm_container_app_environment" "containerappenv" {
+resource "azurerm_container_app_environment" "containerAppEnv" {
   name                       = "${var.cae_name}"
   location                   = data.azurerm_resource_group.rg.location
   resource_group_name        = data.azurerm_resource_group.rg.name
@@ -27,19 +27,26 @@ resource "azurerm_container_registry" "acr" {
 }
 
 #build acr image
+#can i even build an image declaritively?
 
 resource "azurerm_user_assigned_identity" "gitActionRunnerIdentity" {
   location            = data.azurerm_resource_group.rg.location
   name                = "${var.user_assigned_identity_name}"
   resource_group_name = data.azurerm_resource_group.rg.name
 }
-#will need acr pull role
 
-resource "azurerm_container_app_job" "example" {
+#can this be achieved here?  role assignments are done by cloud team.
+resource "azurerm_role_assignment" "runnerIdentityRole" {
+  scope                = azurerm_container_registry.acr.id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.id
+}
+
+resource "azurerm_container_app_job" "containerAppJob" {
   name                         = "${var.cae_job_name}"
   location                     = data.azurerm_resource_group.rg.location
   resource_group_name          = data.azurerm_resource_group.rg.name
-  container_app_environment_id = azurerm_container_app_environment.containerappenv.id
+  container_app_environment_id = azurerm_container_app_environment.containerAppEnv.id
 
   replica_timeout_in_seconds = 1800
   replica_retry_limit        = 0
@@ -51,17 +58,15 @@ resource "azurerm_container_app_job" "example" {
         max_executions = 10
         polling_interval_in_seconds = 30
         rules {
-            name = "${var.}"
-            custom_rule_type = github-runner
-            metadata = 
-            # example purposes
-            # {
-            #     "githubAPIURL": "https://api.github.com",
-            #                             "owner": "dto-btn",
-            #                             "repos": "tfrunnertest",
-            #                             "runnerScope": "repo",
-            #                             "targetWorkflowQueueLength": "1"
-            # }
+            name = "${var.cae_job_name}-github-runner"
+            custom_rule_type = "github-runner"
+            metadata = {
+              "githubAPIURL": "https://api.github.com",
+              "owner": "${var.github_repo_owner}",
+              "repos": "${var.github_repo_name}",
+              "runnerScope": "${var.runner_scope}",
+              "targetWorkflowQueueLength": "1"
+            }
             authentication {
               secret_name = "personal-access-token"
               trigger_parameter = "personalAccessToken"
@@ -72,33 +77,23 @@ resource "azurerm_container_app_job" "example" {
   }
    identity {
        type = "UserAssigned"
-       #this is example
-       identity_ids = ["/subscriptions/6425f0ed-3443-4139-8361-9b8d3951d43e/resourcegroups/ScDc-CIO-DTO-RPA_AI_Automation-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/runnerIdentity"] 
+       identity_ids = [azurerm_user_assigned_identity.gitActionRunnerIdentity.id] 
     }
 
   template {
+    # if can't build image declaritely, pass in with var after pipeline runs it before terraform task?
     container {
-      image = "dtocontainer.azurecr.io/dtorunnerimage"
-      name  = "testcontainerappsjob0"
-      env {
-        name = "GITHUB_PAT"
-        secret_name = 
+      #example "dtocontainer.azurecr.io/dtorunnerimage"
+      image = "${var.acr_name}.azurecr.io/${var.acr_repo_name}"
+      name  = "${var.acr_repo_name}"
+      dynamic "env" {
+        for_each = var.acr_image_env_var
+        content {
+          name = each.key
+          value = try(each.value.value, null)
+          secret_name = try(each.value.secretRef, null)
+        }
       }
-    #   "env": [
-    #                             {
-    #                                 "name": "GITHUB_PAT",
-    #                                 "secretRef": "personal-access-token"
-    #                             },
-    #                             {
-    #                                 "name": "GH_URL",
-    #                                 "value": "https://github.com/dto-btn/tfrunnertest"
-    #                             },
-    #                             {
-    #                                 "name": "REGISTRATION_TOKEN_API_URL",
-    #                                 "value": "https://api.github.com/repos/dto-btn/tfrunnertest/actions/runners/registration-token"
-    #                             }
-    #                         ],
-
       cpu    = 2
       memory = "4Gi"
     }
