@@ -2,6 +2,14 @@ data "azurerm_resource_group" "rg" {
     name = var.resource_group
 }
 
+data "azurerm_key_vault" "kv" {
+  name                = "${var.key_vault_name}"
+  resource_group_name = data.azurerm_resource_group.rg.name
+}
+#incorporate keyvault to store github secret's.  ie. pat
+#Grant access to CAE's managed identity access to keyvault
+#will cae job managed identity need to be separate?
+
 resource "azurerm_log_analytics_workspace" "logAnalytics" {
   name                = "${var.cae_name}-analytics"
   location            = data.azurerm_resource_group.rg.location
@@ -50,6 +58,10 @@ resource "azurerm_container_app_job" "containerAppJob" {
 
   replica_timeout_in_seconds = 1800
   replica_retry_limit        = 0
+  dynamic "secret" {
+    #needs a var and foreach
+    name = "personal-access-token"
+  }
   event_trigger_config {
     parallelism              = 1
     replica_completion_count = 1

@@ -39,6 +39,10 @@ variable "acr_repo_name" {
     type = string
 }
 
+variable "key_vault_name" {
+    type = string
+}
+
 variable "acr_image_env_var" {
     type = list(object({
         name = string
