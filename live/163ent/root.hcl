@@ -1,5 +1,5 @@
 locals {
-    config = read_terragrunt_config(find_in_parent_folders("local-secrets.hcl")).locals
+    # config = read_terragrunt_config(find_in_parent_folders("local-secrets.hcl")).locals
 }
 
 generate "terraform" {
@@ -40,10 +40,10 @@ terraform {
             "destroy"
         ]
 
-        env_vars = {
-            ARM_SUBSCRIPTION_ID     = local.config.sandbox-ect.subscription_id
-        }
-        required_var_files = [ "${get_repo_root()}/secret.tfvars" ]
+        # env_vars = {
+        #     ARM_SUBSCRIPTION_ID     = local.config.sandbox-ect.subscription_id
+        # }
+        # required_var_files = [ "${get_repo_root()}/secret.tfvars" ]
     }
 }
 
@@ -62,6 +62,6 @@ remote_state {
 }
 
 inputs = {
-    env = "Sandbox"
-    name_prefix = "ScSc-CIO_ECT"
+    # env = "Sandbox"
+    # name_prefix = "ScSc-CIO_ECT"
 }
