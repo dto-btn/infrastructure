@@ -9,6 +9,15 @@ data "azurerm_key_vault" "kv" {
 #incorporate keyvault to store github secret's.  ie. pat
 #Grant access to CAE's managed identity access to keyvault
 #will cae job managed identity need to be separate?
+#look into diff auth method other than PAT tokens
+
+data "azurerm_container_registry" "acr" {
+  name                = "${var.acr_name}"
+  resource_group_name = data.azurerm_resource_group.rg.name
+  # location            = data.azurerm_resource_group.rg.location
+  # sku                 = "Basic"
+  # admin_enabled       = false
+}
 
 resource "azurerm_log_analytics_workspace" "logAnalytics" {
   name                = "${var.cae_name}-analytics"
@@ -26,13 +35,7 @@ resource "azurerm_container_app_environment" "containerAppEnv" {
   log_analytics_workspace_id = azurerm_log_analytics_workspace.logAnalytics.id
 }
 
-resource "azurerm_container_registry" "acr" {
-  name                = "${var.acr_name}"
-  resource_group_name = data.azurerm_resource_group.rg.name
-  location            = data.azurerm_resource_group.rg.location
-  sku                 = "Basic"
-  admin_enabled       = false
-}
+
 
 #build acr image
 #can i even build an image declaritively?
@@ -45,7 +48,7 @@ resource "azurerm_user_assigned_identity" "gitActionRunnerIdentity" {
 
 #can this be achieved here?  role assignments are done by cloud team.
 resource "azurerm_role_assignment" "runnerIdentityRole" {
-  scope                = azurerm_container_registry.acr.id
+  scope                = data.azurerm_container_registry.acr.id
   role_definition_name = "AcrPull"
   principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.id
 }
