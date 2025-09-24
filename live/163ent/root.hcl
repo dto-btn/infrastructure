@@ -11,16 +11,17 @@ generate "terraform" {
 generate "provider" {
     path      = "provider.tf"
     if_exists = "overwrite"
-    contents = <<EOF
-                provider "azurerm" {
-                    skip_provider_registration = true
-                    features {
-                        resource_group {
-                            prevent_deletion_if_contains_resources = false
-                        }
-                    }
-                }
-            EOF
+    contents  = file("../common/provider.tf")
+    # contents = <<EOF
+    #             provider "azurerm" {
+    #                 resource_provider_registrations = "none"
+    #                 features {
+    #                     resource_group {
+    #                         prevent_deletion_if_contains_resources = false
+    #                     }
+    #                 }
+    #             }
+    #         EOF
 }
 
 terraform {
