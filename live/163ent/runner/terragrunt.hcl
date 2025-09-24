@@ -9,8 +9,9 @@ dependency "kvacr" {
 inputs = {
     resource_group = "ScSc-CIO_ECT_RunnerTest-rg"
     location = "canadacentral"
-    cae_name = "cae-action-runner"
-    cae_job_name = "cae-action-runner-job"
+    runner_name = "dto-btn"
+    use_existing_cae = false
+    cae_job_name = "github-runner-job"
     # acr_name = "dtocontainer"
     acr_name = dependency.kvacr.outputs.acr_name
     user_assigned_identity_name = "action-runner-identity"
@@ -18,24 +19,29 @@ inputs = {
     github_repo_owner = "dto-btn"
     runner_scope = "repo"
     key_vault_name = dependency.kvacr.outputs.key_vault_name
+    acr_image_repo_name = "githubrunnerimage"
+    cae_job_secrets = [{
+        name = "personal-access-token"
+        value = "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"
+    }]
+    log_analytics_workspace_name = dependency.kvacr.outputs.log_analytics_workspace_name
 
 
-    # these to be taken out.  repo name wont be defined until an image is built. image env var will change if we do github app 
-    # acr_repo_name = ""
-    # acr_image_env_var = [
-    #     {
-    #         "name": "GITHUB_PAT",
-    #         "secretRef": "personal-access-token"
-    #     },
-    #     {
-    #         "name": "GH_URL",
-    #         "value": "https://github.com/dto-btn/tfrunnertest"
-    #     },
-    #     {
-    #         "name": "REGISTRATION_TOKEN_API_URL",
-    #         "value": "https://api.github.com/repos/dto-btn/tfrunnertest/actions/runners/registration-token"
-    #     }
-    # ]
+    # these will change after we change from pat to github app reg
+    acr_image_env_var = [
+        {
+            "name": "GITHUB_PAT",
+            "secretRef": "personal-access-token"
+        },
+        {
+            "name": "GH_URL",
+            "value": "https://github.com/dto-btn/tfrunnertest"
+        },
+        {
+            "name": "REGISTRATION_TOKEN_API_URL",
+            "value": "https://api.github.com/repos/dto-btn/tfrunnertest/actions/runners/registration-token"
+        }
+    ]
 }
 
 include "root" {
