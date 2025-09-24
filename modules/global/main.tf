@@ -1,13 +1,13 @@
 data "azurerm_resource_group" "rg"{
-    name = local.resource_group_name
+    name = var.resource_group_name
 }
 
 resource "azurerm_key_vault" "infrakv" {
-  name                        = "${local.name_prefix}-kv"
+  name                        = "${var.name_prefix}-kv"
   location                    = data.azurerm_resource_group.rg.location
   resource_group_name         = data.azurerm_resource_group.rg.name
   enabled_for_disk_encryption = true
-  tenant_id                   = local.tenant_id  #this to change?  abstract it out?
+  tenant_id                   = var.tenant_id  #this to change?  abstract it out?
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
 
@@ -16,9 +16,13 @@ resource "azurerm_key_vault" "infrakv" {
 }
 
 resource "azurerm_container_registry" "acr" {
-  name                = "${local.name_prefix}-acr"
+  name                = "${var.name_prefix}-acr"
   resource_group_name = data.azurerm_resource_group.rg.name
   location            = data.azurerm_resource_group.rg.location
   sku                 = "Basic"
   admin_enabled       = false
 }
+
+#storage accounts?
+#Log analytics?
+#separate into subfolders?  for finegrained dependency blocks?
