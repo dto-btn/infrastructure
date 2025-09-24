@@ -43,6 +43,10 @@ variable "key_vault_name" {
     type = string
 }
 
+variable "log_analytics_workspace_name" {
+    type = string
+}
+
 variable "acr_image_env_var" {
     type = list(object({
         name = string

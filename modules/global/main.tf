@@ -23,6 +23,16 @@ resource "azurerm_container_registry" "acr" {
   admin_enabled       = false
 }
 
+resource "azurerm_log_analytics_workspace" "logAnalytics" {
+  name                = "${var.name_prefix}-analytics"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
+
+
 #storage accounts?
 #Log analytics?
 #separate into subfolders?  for finegrained dependency blocks?

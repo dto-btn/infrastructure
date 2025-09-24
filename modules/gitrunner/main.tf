@@ -19,26 +19,18 @@ data "azurerm_container_registry" "acr" {
   # admin_enabled       = false
 }
 
-resource "azurerm_log_analytics_workspace" "logAnalytics" {
-  name                = "${var.cae_name}-analytics"
-  location            = data.azurerm_resource_group.rg.location
+data "azurerm_log_analytics_workspace" "logAnalytics" {
+  name = "${var.log_analytics_workspace_name}"
   resource_group_name = data.azurerm_resource_group.rg.name
-  sku                 = "PerGB2018"
-  retention_in_days   = 30
 }
 
 resource "azurerm_container_app_environment" "containerAppEnv" {
   name                       = "${var.cae_name}"
   location                   = data.azurerm_resource_group.rg.location
   resource_group_name        = data.azurerm_resource_group.rg.name
-  logs_destination           = "log-analytics"
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.logAnalytics.id
+  logs_destination          = "log-analytics"
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logAnalytics.id
 }
-
-
-
-#build acr image
-#can i even build an image declaritively?
 
 resource "azurerm_user_assigned_identity" "gitActionRunnerIdentity" {
   location            = data.azurerm_resource_group.rg.location
