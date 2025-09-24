@@ -24,8 +24,15 @@ data "azurerm_log_analytics_workspace" "logAnalytics" {
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
+data "azurerm_container_app_environment" "containerAppEnvExisting" {
+  count = var.use_existing_cae ? 1 : 0
+  name = "${var.cae_name}"
+  resource_group_name = data.azurerm_resource_group.rg.name
+}
+
 resource "azurerm_container_app_environment" "containerAppEnv" {
-  name                       = "${var.cae_name}"
+  count = var.use_existing_cae ? 0 : 1
+  name                       = "${var.runner_name}-cae"
   location                   = data.azurerm_resource_group.rg.location
   resource_group_name        = data.azurerm_resource_group.rg.name
   logs_destination          = "log-analytics"
@@ -39,7 +46,7 @@ resource "azurerm_container_registry_task" "buildImage" {
     dockerfile_path       = "Dockerfile.github"
     context_path         = "https://github.com/Azure-Samples/container-apps-ci-cd-runner-tutorial.git"
     context_access_token = "123"
-    image_names = ["githubrunnerimage"]
+    image_names = ["${var.acr_image_repo_name}"]
   }
 }
 
@@ -60,13 +67,18 @@ resource "azurerm_container_app_job" "containerAppJob" {
   name                         = "${var.cae_job_name}"
   location                     = data.azurerm_resource_group.rg.location
   resource_group_name          = data.azurerm_resource_group.rg.name
-  container_app_environment_id = azurerm_container_app_environment.containerAppEnv.id
+  container_app_environment_id = var.use_existing_cae ? data.azurerm_container_registry.acr.id : azurerm_container_app_environment.containerAppEnv.id
 
   replica_timeout_in_seconds = 1800
   replica_retry_limit        = 0
   dynamic "secret" {
     #needs a var and foreach
-    name = "personal-access-token"
+    for_each = var.cae_job_secrets
+    content {
+      name = each.key
+      value = each.value.value
+    }
+    
   }
   event_trigger_config {
     parallelism              = 1
@@ -102,8 +114,8 @@ resource "azurerm_container_app_job" "containerAppJob" {
     # if can't build image declaritely, pass in with var after pipeline runs it before terraform task?
     container {
       #example "dtocontainer.azurecr.io/dtorunnerimage"
-      image = "${var.acr_name}.azurecr.io/${var.acr_repo_name}"
-      name  = "${var.acr_repo_name}"
+      image = "${var.acr_name}.azurecr.io/${var.acr_image_repo_name}"
+      name  = "${var.acr_image_repo_name}"
       dynamic "env" {
         for_each = var.acr_image_env_var
         content {

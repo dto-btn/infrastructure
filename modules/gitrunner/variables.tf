@@ -6,6 +6,14 @@ variable "location" {
     type = string
 }
 
+variable "runner_name" {
+    type = string
+}
+
+variable "use_existing_cae" {
+    type = bool
+}
+
 variable "cae_name" {
     type = string
 }
@@ -35,8 +43,15 @@ variable "runner_scope" {
     default = "repo"
 }
 
-variable "acr_repo_name" {
+variable "acr_image_repo_name" {
     type = string
+}
+
+variable "cae_job_secrets" {
+    type = list(object({
+        name = string
+        value = string
+    }))
 }
 
 variable "key_vault_name" {
