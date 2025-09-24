@@ -14,18 +14,28 @@ inputs = {
     cae_job_name = "github-runner-job"
     cae_name = null
     # acr_name = "dtocontainer"
-    acr_name = dependency.kvacr.outputs.acr_name
+    acr = {
+        name = dependency.kvacr.outputs.acr_name
+        resource_group_name = dependency.kvacr.outputs.resource_group_name
+    }
     user_assigned_identity_name = "action-runner-identity"
     github_repo_name = "tfrunnertest"
     github_repo_owner = "dto-btn"
     runner_scope = "repo"
-    key_vault_name = dependency.kvacr.outputs.key_vault_name
+    key_vault = {
+        name = dependency.kvacr.outputs.key_vault_name
+        resource_group_name = dependency.kvacr.outputs.resource_group_name
+    }
     acr_image_repo_name = "githubrunnerimage"
     cae_job_secrets = [{
         name = "personal-access-token"
         value = "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"
     }]
-    log_analytics_workspace_name = dependency.kvacr.outputs.log_analytics_workspace_name
+    log_analytics_workspace = {
+        name = dependency.kvacr.outputs.log_analytics_workspace_name
+        resource_group_name = dependency.kvacr.outputs.resource_group_name
+    }
+     
 
 
     # these will change after we change from pat to github app reg

@@ -3,8 +3,8 @@ data "azurerm_resource_group" "rg" {
 }
 
 data "azurerm_key_vault" "kv" {
-  name                = "${var.key_vault_name}"
-  resource_group_name = data.azurerm_resource_group.rg.name
+  name                = "${var.key_vault.name}"
+  resource_group_name = "${var.key_vault.resource_group_name}"
 }
 #incorporate keyvault to store github secret's.  ie. pat
 #Grant access to CAE's managed identity access to keyvault
@@ -12,16 +12,16 @@ data "azurerm_key_vault" "kv" {
 #look into diff auth method other than PAT tokens
 
 data "azurerm_container_registry" "acr" {
-  name                = "${var.acr_name}"
-  resource_group_name = data.azurerm_resource_group.rg.name
+  name                = "${var.acr.name}"
+  resource_group_name = "${var.acr.resource_group_name}"
   # location            = data.azurerm_resource_group.rg.location
   # sku                 = "Basic"
   # admin_enabled       = false
 }
 
 data "azurerm_log_analytics_workspace" "logAnalytics" {
-  name = "${var.log_analytics_workspace_name}"
-  resource_group_name = data.azurerm_resource_group.rg.name
+  name = "${var.log_analytics_workspace.name}"
+  resource_group_name = "${var.log_analytics_workspace.resource_group_name}"
 }
 
 data "azurerm_container_app_environment" "containerAppEnvExisting" {
@@ -42,6 +42,9 @@ resource "azurerm_container_app_environment" "containerAppEnv" {
 resource "azurerm_container_registry_task" "buildImage" {
   name                  = "buildRunnerImageTask"
   container_registry_id = data.azurerm_container_registry.acr.id
+  platform {
+    os = "Linux"
+  }
   docker_step {
     dockerfile_path       = "Dockerfile.github"
     context_path         = "https://github.com/Azure-Samples/container-apps-ci-cd-runner-tutorial.git"
@@ -72,11 +75,10 @@ resource "azurerm_container_app_job" "containerAppJob" {
   replica_timeout_in_seconds = 1800
   replica_retry_limit        = 0
   dynamic "secret" {
-    #needs a var and foreach
     for_each = var.cae_job_secrets
     content {
-      name = each.key
-      value = each.value.value
+      name = secret.key
+      value = secret.value.value
     }
     
   }
@@ -114,14 +116,14 @@ resource "azurerm_container_app_job" "containerAppJob" {
     # if can't build image declaritely, pass in with var after pipeline runs it before terraform task?
     container {
       #example "dtocontainer.azurecr.io/dtorunnerimage"
-      image = "${var.acr_name}.azurecr.io/${var.acr_image_repo_name}"
+      image = "${var.acr.name}.azurecr.io/${var.acr_image_repo_name}"
       name  = "${var.acr_image_repo_name}"
       dynamic "env" {
         for_each = var.acr_image_env_var
         content {
-          name = each.key
-          value = try(each.value.value, null)
-          secret_name = try(each.value.secretRef, null)
+          name = env.key
+          value = try(env.value.value, null)
+          secret_name = try(env.value.secretRef, null)
         }
       }
       cpu    = 2

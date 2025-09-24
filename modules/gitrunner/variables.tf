@@ -22,8 +22,11 @@ variable "cae_job_name" {
     type = string
 }
 
-variable "acr_name" {
-    type = string
+variable "acr" {
+    type = object({
+      name = string
+      resource_group_name = string
+    })
 }
 
 variable "user_assigned_identity_name" {
@@ -54,12 +57,18 @@ variable "cae_job_secrets" {
     }))
 }
 
-variable "key_vault_name" {
-    type = string
+variable "key_vault" {
+    type = object({
+      name = string
+      resource_group_name = string
+    })
 }
 
-variable "log_analytics_workspace_name" {
-    type = string
+variable "log_analytics_workspace" {
+    type = object({
+      name = string
+      resource_group_name = string
+    })
 }
 
 variable "acr_image_env_var" {
