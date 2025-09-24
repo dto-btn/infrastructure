@@ -3,7 +3,7 @@ terraform {
 }
 
 dependency "kvacr" {
-    config_path = "../infrastructure"
+    config_path = "../global"
 }
 
 inputs = {
@@ -12,6 +12,7 @@ inputs = {
     runner_name = "dto-btn"
     use_existing_cae = false
     cae_job_name = "github-runner-job"
+    cae_name = null
     # acr_name = "dtocontainer"
     acr_name = dependency.kvacr.outputs.acr_name
     user_assigned_identity_name = "action-runner-identity"
