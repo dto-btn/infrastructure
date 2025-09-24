@@ -32,6 +32,17 @@ resource "azurerm_container_app_environment" "containerAppEnv" {
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logAnalytics.id
 }
 
+resource "azurerm_container_registry_task" "buildImage" {
+  name                  = "buildRunnerImageTask"
+  container_registry_id = data.azurerm_container_registry.acr.id
+  docker_step {
+    dockerfile_path       = "Dockerfile.github"
+    context_path         = "https://github.com/Azure-Samples/container-apps-ci-cd-runner-tutorial.git"
+    context_access_token = "123"
+    image_names = ["githubrunnerimage"]
+  }
+}
+
 resource "azurerm_user_assigned_identity" "gitActionRunnerIdentity" {
   location            = data.azurerm_resource_group.rg.location
   name                = "${var.user_assigned_identity_name}"
