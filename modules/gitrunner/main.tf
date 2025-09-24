@@ -67,7 +67,7 @@ resource "azurerm_container_app_job" "containerAppJob" {
   name                         = "${var.cae_job_name}"
   location                     = data.azurerm_resource_group.rg.location
   resource_group_name          = data.azurerm_resource_group.rg.name
-  container_app_environment_id = var.use_existing_cae ? data.azurerm_container_registry.acr.id : azurerm_container_app_environment.containerAppEnv.id
+  container_app_environment_id = var.use_existing_cae ? data.azurerm_container_registry.acr.id : azurerm_container_app_environment.containerAppEnv[0].id
 
   replica_timeout_in_seconds = 1800
   replica_retry_limit        = 0
