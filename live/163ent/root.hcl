@@ -13,10 +13,6 @@ generate "provider" {
     if_exists = "overwrite"
     contents = <<EOF
                 provider "azurerm" {
-                    subscription_id = "${local.config.sandbox-ect.subscription_id}"
-                    tenant_id       = "${local.config.sandbox-ect.tenant_id}"
-                    client_id       = "${local.config.sandbox-ect.client_id}"
-                    client_secret   = "${local.config.sandbox-ect.client_secret}"
 
                     features {
                         resource_group {
