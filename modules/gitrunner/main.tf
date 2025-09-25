@@ -59,12 +59,12 @@ resource "azurerm_user_assigned_identity" "gitActionRunnerIdentity" {
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
-#can this be achieved here?  role assignments are done by cloud team.
-resource "azurerm_role_assignment" "runnerIdentityRole" {
-  scope                = data.azurerm_container_registry.acr.id
-  role_definition_name = "AcrPull"
-  principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.id
-}
+# #can this be achieved here?  role assignments are done by cloud team.
+# resource "azurerm_role_assignment" "runnerIdentityRole" {
+#   scope                = data.azurerm_container_registry.acr.id
+#   role_definition_name = "AcrPull"
+#   principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.id
+# }
 
 resource "azurerm_container_app_job" "containerAppJob" {
   name                         = "${var.cae_job_name}"
@@ -74,6 +74,10 @@ resource "azurerm_container_app_job" "containerAppJob" {
 
   replica_timeout_in_seconds = 1800
   replica_retry_limit        = 0
+  registry {
+    identity = azurerm_user_assigned_identity.gitActionRunnerIdentity.id
+    server = "${var.acr.name}.azurecr.io"
+  }
   dynamic "secret" {
     for_each = var.cae_job_secrets
     content {
