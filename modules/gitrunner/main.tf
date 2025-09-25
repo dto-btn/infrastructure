@@ -77,7 +77,7 @@ resource "azurerm_container_app_job" "containerAppJob" {
   dynamic "secret" {
     for_each = var.cae_job_secrets
     content {
-      name = secret.key
+      name = secret.value.name
       value = secret.value.value
     }
     
@@ -121,7 +121,7 @@ resource "azurerm_container_app_job" "containerAppJob" {
       dynamic "env" {
         for_each = var.acr_image_env_var
         content {
-          name = env.key
+          name = env.value.name
           value = try(env.value.value, null)
           secret_name = try(env.value.secretRef, null)
         }
