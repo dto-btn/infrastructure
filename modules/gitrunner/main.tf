@@ -46,9 +46,9 @@ resource "azurerm_container_registry_task" "buildImage" {
     os = "Linux"
   }
   docker_step {
-    dockerfile_path       = "Dockerfile.github"
-    context_path         = "https://github.com/Azure-Samples/container-apps-ci-cd-runner-tutorial.git"
-    context_access_token = "123"
+    dockerfile_path       = "Dockerfile"
+    context_path         = "https://github.com/dto-btn/git-action-runner"
+    context_access_token = "NA"
     image_names = ["${var.acr_image_repo_name}"]
   }
 }
@@ -94,13 +94,15 @@ resource "azurerm_container_app_job" "containerAppJob" {
         max_executions = 10
         polling_interval_in_seconds = 30
         rules {
-            name = "${var.cae_job_name}-github-runner"
+            name = "${var.cae_job_name}"
             custom_rule_type = "github-runner"
             metadata = {
               "githubAPIURL": "https://api.github.com",
               "owner": "${var.github_repo_owner}",
-              "repos": "${var.github_repo_name}",
+              # "repos": "${var.github_repo_name}",
               "runnerScope": "${var.runner_scope}",
+              "applicationID": "",
+              "installationID": "",
               "targetWorkflowQueueLength": "1"
             }
             authentication {
