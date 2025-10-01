@@ -43,7 +43,7 @@ variable "github_repo_owner" {
 
 variable "runner_scope" {
     type = string
-    default = "repo"
+    default = "org"
 }
 
 variable "acr_image_repo_name" {
@@ -94,3 +94,9 @@ variable "acr_image_env_var" {
 #     }
 # ]
 
+variable "GITHUB_APP_ID" {
+    type = string
+}
+variable "GITHUB_APP_INSTALLATION_ID" {
+    type = string
+}

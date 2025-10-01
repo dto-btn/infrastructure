@@ -11,9 +11,19 @@ resource "azurerm_key_vault" "infrakv" {
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
 
-  sku_name = "standard"
-  
+  sku_name = "standard" 
 }
+
+# #some default access policies maybe?
+# resource "azurerm_key_vault_access_policy" "example-principal" {
+#   key_vault_id = azurerm_key_vault.infrakv.id
+#   tenant_id    = var.tenant_id
+#   object_id    = 
+
+#   key_permissions = [
+#     "Get", "List", "Encrypt", "Decrypt"
+#   ]
+# }
 
 resource "azurerm_container_registry" "acr" {
   name                = "${var.acr_name}"

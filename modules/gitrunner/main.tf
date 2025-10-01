@@ -47,6 +47,7 @@ resource "azurerm_container_registry_task" "buildImage" {
   }
   docker_step {
     dockerfile_path       = "Dockerfile"
+    #TODO
     context_path         = "https://github.com/dto-btn/git-action-runner"
     context_access_token = "NA"
     image_names = ["${var.acr_image_repo_name}"]
@@ -101,13 +102,15 @@ resource "azurerm_container_app_job" "containerAppJob" {
               "owner": "${var.github_repo_owner}",
               # "repos": "${var.github_repo_name}",
               "runnerScope": "${var.runner_scope}",
-              "applicationID": "",
-              "installationID": "",
+              "applicationID": "${var.GITHUB_APP_ID}",
+              "installationID": "${var.GITHUB_APP_INSTALLATION_ID}",
               "targetWorkflowQueueLength": "1"
             }
             authentication {
-              secret_name = "personal-access-token"
-              trigger_parameter = "personalAccessToken"
+              secret_name = "pem"
+              trigger_parameter = "appKey"
+              #    --scale-rule-auth "personalAccessToken=personal-access-token" \
+              #"appKey=pem" 
             }
         }
     }
@@ -122,7 +125,7 @@ resource "azurerm_container_app_job" "containerAppJob" {
     # if can't build image declaritely, pass in with var after pipeline runs it before terraform task?
     container {
       #example "dtocontainer.azurecr.io/dtorunnerimage"
-      image = "${var.acr.name}.azurecr.io/${var.acr_image_repo_name}"
+      image = "${var.acr.name}.azurecr.io/${var.acr_image_repo_name}:latest"
       name  = "${var.acr_image_repo_name}"
       dynamic "env" {
         for_each = var.acr_image_env_var
