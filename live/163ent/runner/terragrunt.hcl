@@ -9,24 +9,25 @@ dependency "kvacr" {
 inputs = {
     resource_group = "ScSc-CIO_ECT_RunnerTest-rg"
     location = "canadacentral"
-    runner_name = "dto-btn"
     use_existing_cae = false
     cae_job_name = "github-runner-job"
-    cae_name = null
+    cae_name = "dto-btn"
     # acr_name = "dtocontainer"
     acr = {
         name = dependency.kvacr.outputs.acr_name
         resource_group_name = dependency.kvacr.outputs.resource_group_name
     }
     user_assigned_identity_name = "action-runner-identity"
-    # github_repo_name = "tfrunnertest"
-    github_repo_owner = "dto-btn"
+    #Adding repo as list.  Without it, it scans all repos individually.  Hits API rate limit quickly
+    github_repo_names = "tfrunnertest"
+    github_owner = "dto-btn"
     runner_scope = "org"
     key_vault = {
         name = dependency.kvacr.outputs.key_vault_name
         resource_group_name = dependency.kvacr.outputs.resource_group_name
     }
     acr_image_repo_name = "githubrunnerimage"
+    acr_image_repo_tag = "latest"
     cae_job_secrets = [{
         name = "pem"
         #this will be a keyvault reference later
@@ -70,6 +71,11 @@ inputs = {
     ],
     GITHUB_APP_ID = "2013936"
     GITHUB_APP_INSTALLATION_ID = "87587800"
+    github-action-runner-image = {
+        dockerFile_path = "Dockerfile"
+        context_path = "https://github.com/dto-btn/git-action-runner"
+        context_access_token = "NA"
+    }
 }
 
 include "root" {

@@ -32,7 +32,7 @@ data "azurerm_container_app_environment" "containerAppEnvExisting" {
 
 resource "azurerm_container_app_environment" "containerAppEnv" {
   count = var.use_existing_cae ? 0 : 1
-  name                       = "${var.runner_name}-cae"
+  name                       = "${var.cae_name}-cae"
   location                   = data.azurerm_resource_group.rg.location
   resource_group_name        = data.azurerm_resource_group.rg.name
   logs_destination          = "log-analytics"
@@ -46,10 +46,12 @@ resource "azurerm_container_registry_task" "buildImage" {
     os = "Linux"
   }
   docker_step {
-    dockerfile_path       = "Dockerfile"
+    # dockerfile_path       = "Dockerfile"
+    dockerfile_path       = "${var.github-action-runner-image.dockerFile_path}"
     #TODO
-    context_path         = "https://github.com/dto-btn/git-action-runner"
-    context_access_token = "NA"
+    # context_path         = "https://github.com/dto-btn/git-action-runner"
+    context_path         = "${var.github-action-runner-image.context_path}"
+    context_access_token = "${var.github-action-runner-image.context_access_token}"
     image_names = ["${var.acr_image_repo_name}"]
   }
 }
@@ -97,15 +99,16 @@ resource "azurerm_container_app_job" "containerAppJob" {
         rules {
             name = "${var.cae_job_name}"
             custom_rule_type = "github-runner"
-            metadata = {
-              "githubAPIURL": "https://api.github.com",
-              "owner": "${var.github_repo_owner}",
-              # "repos": "${var.github_repo_name}",
-              "runnerScope": "${var.runner_scope}",
-              "applicationID": "${var.GITHUB_APP_ID}",
-              "installationID": "${var.GITHUB_APP_INSTALLATION_ID}",
-              "targetWorkflowQueueLength": "1"
-            }
+            metadata = local.scale_rule_metadata
+            # metadata = {
+            #   "githubAPIURL": "https://api.github.com",
+            #   "owner": "${var.github_owner}",
+            #   "repos": "${var.github_repo_name}",
+            #   "runnerScope": "${var.runner_scope}",
+            #   "applicationID": "${var.GITHUB_APP_ID}",
+            #   "installationID": "${var.GITHUB_APP_INSTALLATION_ID}",
+            #   "targetWorkflowQueueLength": "1"
+            # }
             authentication {
               secret_name = "pem"
               trigger_parameter = "appKey"
@@ -124,8 +127,7 @@ resource "azurerm_container_app_job" "containerAppJob" {
   template {
     # if can't build image declaritely, pass in with var after pipeline runs it before terraform task?
     container {
-      #example "dtocontainer.azurecr.io/dtorunnerimage"
-      image = "${var.acr.name}.azurecr.io/${var.acr_image_repo_name}:latest"
+      image = "${var.acr.name}.azurecr.io/${var.acr_image_repo_name}${var.acr_image_repo_tag == null ? "" : ":${var.acr_image_repo_tag}"}"
       name  = "${var.acr_image_repo_name}"
       dynamic "env" {
         for_each = var.acr_image_env_var

@@ -6,11 +6,8 @@ variable "location" {
     type = string
 }
 
-variable "runner_name" {
-    type = string
-}
-
 variable "use_existing_cae" {
+    description = "Whether you want to re-use existing container app environment or not.  cae_name will be used for new and to search for existing"
     type = bool
 }
 
@@ -31,13 +28,17 @@ variable "acr" {
 
 variable "user_assigned_identity_name" {
     type = string
+    description = "used to pull acr image and potentially keyvault access.  Will need ACRPULL role on the scope of the ACR it's pulling from"
 }
 
-# variable "github_repo_name" {
-#     type = string
-# }
+#this will be array, to lower api rate limit.  org scans all repos, calls individually per repo
+variable "github_repo_names" {
+    type = string
+    default = null
+    description = "List of repos to poll from and scale."
+}
 
-variable "github_repo_owner" {
+variable "github_owner" {
     type = string
 }
 
@@ -48,6 +49,20 @@ variable "runner_scope" {
 
 variable "acr_image_repo_name" {
     type = string
+}
+
+variable "acr_image_repo_tag" {
+    type = string
+    default = null
+}
+
+variable "github-action-runner-image" {
+    type = object({
+        dockerFile_path = string
+        context_path = string
+        context_access_token = string
+    })
+    description = "Values for repo holding dockerfile for building the action runner image."
 }
 
 variable "cae_job_secrets" {
