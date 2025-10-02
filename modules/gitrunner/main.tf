@@ -14,9 +14,6 @@ data "azurerm_key_vault" "kv" {
 data "azurerm_container_registry" "acr" {
   name                = "${var.acr.name}"
   resource_group_name = "${var.acr.resource_group_name}"
-  # location            = data.azurerm_resource_group.rg.location
-  # sku                 = "Basic"
-  # admin_enabled       = false
 }
 
 data "azurerm_log_analytics_workspace" "logAnalytics" {
@@ -46,10 +43,7 @@ resource "azurerm_container_registry_task" "buildImage" {
     os = "Linux"
   }
   docker_step {
-    # dockerfile_path       = "Dockerfile"
     dockerfile_path       = "${var.github-action-runner-image.dockerFile_path}"
-    #TODO
-    # context_path         = "https://github.com/dto-btn/git-action-runner"
     context_path         = "${var.github-action-runner-image.context_path}"
     context_access_token = "${var.github-action-runner-image.context_access_token}"
     image_names = ["${var.acr_image_repo_name}"]
@@ -66,7 +60,6 @@ resource "azurerm_user_assigned_identity" "gitActionRunnerIdentity" {
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
-# #can this be achieved here?  role assignments are done by cloud team.
 resource "azurerm_role_assignment" "runnerIdentityRole" {
   scope                = data.azurerm_container_registry.acr.id
   role_definition_name = "AcrPull"
@@ -105,20 +98,9 @@ resource "azurerm_container_app_job" "containerAppJob" {
             name = "${var.cae_job_name}"
             custom_rule_type = "github-runner"
             metadata = local.scale_rule_metadata
-            # metadata = {
-            #   "githubAPIURL": "https://api.github.com",
-            #   "owner": "${var.github_owner}",
-            #   "repos": "${var.github_repo_name}",
-            #   "runnerScope": "${var.runner_scope}",
-            #   "applicationID": "${var.GITHUB_APP_ID}",
-            #   "installationID": "${var.GITHUB_APP_INSTALLATION_ID}",
-            #   "targetWorkflowQueueLength": "1"
-            # }
             authentication {
               secret_name = "pem"
-              trigger_parameter = "appKey"
-              #    --scale-rule-auth "personalAccessToken=personal-access-token" \
-              #"appKey=pem" 
+              trigger_parameter = "appKey" 
             }
         }
     }
@@ -130,7 +112,6 @@ resource "azurerm_container_app_job" "containerAppJob" {
     }
 
   template {
-    # if can't build image declaritely, pass in with var after pipeline runs it before terraform task?
     container {
       image = "${var.acr.name}.azurecr.io/${var.acr_image_repo_name}${var.acr_image_repo_tag == null ? "" : ":${var.acr_image_repo_tag}"}"
       name  = "${var.acr_image_repo_name}"

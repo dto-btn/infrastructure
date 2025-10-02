@@ -7,18 +7,16 @@ dependency "kvacr" {
 }
 
 inputs = {
-    resource_group = "ScSc-CIO_ECT_RunnerTest-rg"
+    resource_group = "G3Pc-SSC_CIOAssistant_Project-rg"
     location = "canadacentral"
     use_existing_cae = false
-    cae_job_name = "github-runner-job"
-    cae_name = "dto-btn"
-    # acr_name = "dtocontainer"
+    cae_job_name = "ent-github-runner-job"
+    cae_name = "cio-assistant"
     acr = {
         name = dependency.kvacr.outputs.acr_name
         resource_group_name = dependency.kvacr.outputs.resource_group_name
     }
-    user_assigned_identity_name = "action-runner-identity"
-    #Adding repo as list.  Without it, it scans all repos individually.  Hits API rate limit quickly
+    user_assigned_identity_name = "runnerIdentity"
     github_repo_names = "tfrunnertest"
     github_owner = "dto-btn"
     runner_scope = "org"
@@ -37,7 +35,6 @@ inputs = {
         name = dependency.kvacr.outputs.log_analytics_workspace_name
         resource_group_name = dependency.kvacr.outputs.resource_group_name
     }
-    # these will change after we change from pat to github app reg
     acr_image_env_var = [
         {
             "name": "CLIENT_ID",
@@ -56,10 +53,6 @@ inputs = {
             "name":"PEM",
             "secretRef": "pem"
         },
-        # {
-        #     "name": "KEY_FILE_NAME",
-        #     "secretRef": "personal-access-token"
-        # },
         {
             "name": "GH_URL",
             "value": "https://github.com/dto-btn"
@@ -69,6 +62,7 @@ inputs = {
             "value": "https://api.github.com/orgs/dto-btn/actions/runners/registration-token"
         }
     ],
+    #keyvault reference later
     GITHUB_APP_ID = "2013936"
     GITHUB_APP_INSTALLATION_ID = "87587800"
     github-action-runner-image = {
