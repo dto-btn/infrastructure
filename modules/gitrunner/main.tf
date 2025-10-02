@@ -66,10 +66,11 @@ resource "azurerm_user_assigned_identity" "gitActionRunnerIdentity" {
 resource "azurerm_role_assignment" "runnerIdentityRole" {
   scope                = data.azurerm_container_registry.acr.id
   role_definition_name = "AcrPull"
-  principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.id
+  principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.principal_id
 }
 
 resource "azurerm_container_app_job" "containerAppJob" {
+  depends_on = [ azurerm_role_assignment.runnerIdentityRole ]
   name                         = "${var.cae_job_name}"
   location                     = data.azurerm_resource_group.rg.location
   resource_group_name          = data.azurerm_resource_group.rg.name
