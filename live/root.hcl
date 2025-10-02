@@ -1,13 +1,13 @@
 generate "terraform" {
   path      = "terraform.tf"
   if_exists = "overwrite"
-  contents  = file("../common/terraform.tf")
+  contents  = file("./common/terraform.tf")
 }
 
 generate "provider" {
     path      = "provider.tf"
     if_exists = "overwrite"
-    contents  = file("../common/provider.tf")
+    contents  = file("./common/provider.tf")
     # contents = <<EOF
     #             provider "azurerm" {
     #                 resource_provider_registrations = "none"
