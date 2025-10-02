@@ -56,6 +56,10 @@ resource "azurerm_container_registry_task" "buildImage" {
   }
 }
 
+resource "azurerm_container_registry_task_schedule_run_now" "runtask" {
+  container_registry_task_id = azurerm_container_registry_task.buildImage.id
+}
+
 resource "azurerm_user_assigned_identity" "gitActionRunnerIdentity" {
   location            = data.azurerm_resource_group.rg.location
   name                = "${var.user_assigned_identity_name}"
@@ -70,7 +74,7 @@ resource "azurerm_role_assignment" "runnerIdentityRole" {
 }
 
 resource "azurerm_container_app_job" "containerAppJob" {
-  depends_on = [ azurerm_role_assignment.runnerIdentityRole ]
+  depends_on = [ azurerm_container_registry_task_schedule_run_now.runtask, azurerm_role_assignment.runnerIdentityRole ]
   name                         = "${var.cae_job_name}"
   location                     = data.azurerm_resource_group.rg.location
   resource_group_name          = data.azurerm_resource_group.rg.name
