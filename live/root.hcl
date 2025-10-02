@@ -1,7 +1,3 @@
-locals {
-    # config = read_terragrunt_config(find_in_parent_folders("local-secrets.hcl")).locals
-}
-
 generate "terraform" {
   path      = "terraform.tf"
   if_exists = "overwrite"
