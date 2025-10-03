@@ -50,6 +50,7 @@ resource "azurerm_container_registry_task" "buildImage" {
   }
 }
 
+#how to ensure this doesn't builds a new image if not needed.  tags just overwrite don't they?
 resource "azurerm_container_registry_task_schedule_run_now" "runtask" {
   container_registry_task_id = azurerm_container_registry_task.buildImage.id
 }

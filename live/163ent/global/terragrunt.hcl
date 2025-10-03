@@ -13,3 +13,17 @@ inputs = {
    acr_name = "cioassistantacr"
    tenant_id = "7198d08c-c362-4703-9854-53b6f0d8fc44"  #this should be elsewhere.
 }
+
+remote_state {
+    backend = "azurerm"
+    config = {
+        key = "${path_relative_to_include()}/terraform.tfstate"
+        resource_group_name = "GcDc-CTO_RPA_Project-rg"
+        storage_account_name = "gcdaaconfig"
+        container_name = "tfstate"
+    }
+    generate = {
+        path      = "backend.tf"
+        if_exists = "overwrite_terragrunt"
+    }
+}
