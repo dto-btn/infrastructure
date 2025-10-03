@@ -12,7 +12,7 @@ inputs = {
    name_prefix = "G3Pc-SSC_CIOAssistant"
    acr_name = "cioassistantacr"
    tenant_id = "7198d08c-c362-4703-9854-53b6f0d8fc44"  #this should be elsewhere.
-   subscription_id = "e04326a7-a0a1-4c57-9a29-b8c431d14d35"
+   subscription_id = "dd7b6f23-7cf4-4598-a0ba-55888cfb1616"
 }
 
 remote_state {
