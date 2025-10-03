@@ -69,6 +69,7 @@ inputs = {
         context_path = "https://github.com/dto-btn/git-action-runner"
         context_access_token = "NA"
     }
+    subscription_id = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
 }
 
 include "root" {

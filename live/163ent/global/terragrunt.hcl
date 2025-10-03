@@ -12,6 +12,7 @@ inputs = {
    name_prefix = "G3Pc-SSC_CIOAssistant"
    acr_name = "cioassistantacr"
    tenant_id = "7198d08c-c362-4703-9854-53b6f0d8fc44"  #this should be elsewhere.
+   subscription_id = "e04326a7-a0a1-4c57-9a29-b8c431d14d35"
 }
 
 remote_state {
@@ -25,15 +26,5 @@ remote_state {
     generate = {
         path      = "backend.tf"
         if_exists = "overwrite_terragrunt"
-    }
-}
-
-provider "azurerm" {
-    resource_provider_registrations = "none"
-    subscription_id = "e04326a7-a0a1-4c57-9a29-b8c431d14d35" #this to be placed elsewhere after
-    features {
-        resource_group {
-            prevent_deletion_if_contains_resources = false
-        }
     }
 }
