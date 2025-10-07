@@ -14,6 +14,8 @@ resource "azurerm_key_vault" "infrakv" {
   sku_name = "standard" 
 }
 
+# TODO: need access policy to add in PEM file.  Manually added in for now.
+
 # #some default access policies maybe?
 # resource "azurerm_key_vault_access_policy" "example-principal" {
 #   key_vault_id = azurerm_key_vault.infrakv.id

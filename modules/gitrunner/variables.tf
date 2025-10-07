@@ -65,17 +65,25 @@ variable "github-action-runner-image" {
     description = "Values for repo holding dockerfile for building the action runner image."
 }
 
+variable "github-app-pem-file-path" {
+    type = string
+    description = "Filepath of where the PEM file is located on whichever machine terragrunt runs from"
+}
+
 variable "cae_job_secrets" {
     type = list(object({
         name = string
         value = string
     }))
+    default = []
 }
 
 variable "key_vault" {
     type = object({
       name = string
+      id = string
       resource_group_name = string
+      resource_group_id = string
     })
 }
 

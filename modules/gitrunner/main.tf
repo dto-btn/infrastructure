@@ -36,6 +36,13 @@ resource "azurerm_container_app_environment" "containerAppEnv" {
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logAnalytics.id
 }
 
+resource "azurerm_key_vault_secret" "pemFile" {
+  name = "github-app-pem"
+  value = file("${var.github-app-pem-file-path}")
+  key_vault_id = var.key_vault.id
+  # content_type = "application/x-pem-file"
+}
+
 resource "azurerm_container_registry_task" "buildImage" {
   name                  = "buildRunnerImageTask"
   container_registry_id = data.azurerm_container_registry.acr.id
@@ -61,14 +68,20 @@ resource "azurerm_user_assigned_identity" "gitActionRunnerIdentity" {
   resource_group_name = data.azurerm_resource_group.rg.name
 }
 
-resource "azurerm_role_assignment" "runnerIdentityRole" {
+resource "azurerm_role_assignment" "runnerIdentityRoleACRPull" {
   scope                = data.azurerm_container_registry.acr.id
   role_definition_name = "AcrPull"
   principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.principal_id
 }
 
+resource "azurerm_role_assignment" "runnerIdentityRoleKeyVault" {
+  scope                = azurerm_key_vault_secret.pemFile.resource_id
+  role_definition_name   = "Key Vault Secrets User" 
+  principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.principal_id
+}
+
 resource "azurerm_container_app_job" "containerAppJob" {
-  depends_on = [ azurerm_container_registry_task_schedule_run_now.runtask, azurerm_role_assignment.runnerIdentityRole ]
+  depends_on = [ azurerm_container_registry_task_schedule_run_now.runtask, azurerm_role_assignment.runnerIdentityRoleKeyVault, azurerm_role_assignment.runnerIdentityRoleACRPull ]
   name                         = "${var.cae_job_name}"
   location                     = data.azurerm_resource_group.rg.location
   resource_group_name          = data.azurerm_resource_group.rg.name
@@ -79,6 +92,14 @@ resource "azurerm_container_app_job" "containerAppJob" {
   registry {
     identity = azurerm_user_assigned_identity.gitActionRunnerIdentity.id
     server = "${var.acr.name}.azurecr.io"
+  }
+  secret {
+    name = "pem"
+    #this is not successful.  How do i reference a newly created keyvault secret?
+    # https://stackoverflow.com/questions/71041573/azurerm-keyvault-nested-item-should-contain-2-or-3-segments-got-10
+    # read this when im back.  could be a clue
+    key_vault_secret_id = azurerm_key_vault_secret.pemFile.id
+    identity = azurerm_user_assigned_identity.gitActionRunnerIdentity.id
   }
   dynamic "secret" {
     for_each = var.cae_job_secrets
