@@ -33,7 +33,6 @@ inputs = {
         resource_group_name = dependency.kvacr.outputs.resource_group_name
     }
     acr_image_env_var = [
-        #TODO move these two to secrets too
         {
             "name": "CLIENT_ID",
             "value": "Iv23liUSavN8izwHxrgV"
