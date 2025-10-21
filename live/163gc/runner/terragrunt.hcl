@@ -28,11 +28,6 @@ inputs = {
     }
     acr_image_repo_name = "githubrunnerimage"
     acr_image_repo_tag = "latest"
-    # cae_job_secrets = [{
-    #     name = "pem"
-    #     #this will be a keyvault reference later
-    #     value = "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA1P4+rDEPd5dUqKlU4BQKRWQM5HpPlHh7Qqb+YUODUkViKKc1\n5ivpTvS96+bckzONgRpH6wwOUx8aOniQSG64+zB9igOgtdF76g3xzkVNhA4IPxPM\npB9+/6Oo7o0Hj+ivgkgnTifQc2oxpa7zXAp8pwFgmKy/zcSLi7pQoRz0+SHDJnln\nes7GS0b4VuL7DKPYQXIa3DRbqPpNEYGVrIjXRCom4RNwtwXIGJgs9BQAkM94yAr6\nZq/tiQOQ7/e2rnH6f+HGcZF7OGsd18vhLCwU7wx9v2hfX/EsDkjyb1DJWsGmK+vQ\ntIHnPfVizXnSIridwRXV3CkL8YJUlKWKXpZBjwIDAQABAoIBAQCvU3XNkjj0LYrP\np0uphHWL9zaxoIj/Y0m7bPE6qTNhNqH9at7wUDcl+kqX9BqfxTD3E+YdcngcLh8O\nAI5sQVBd3OWKBUB2SjFhUgc4z01mpZJeMfMjKpYE4vg9HbQa3uQSL0jDifyJ9OFX\nTDMhEbTYWEbmhlUAkYh5BW43oTl6FLMaXQMymYP3fFb6g5JtSirTQ61wjwXO7wRo\n27Eoii4CJSFNQIV1xcBuXYxZb68NGu+hJXDODDvqYWkBS4PufDeRgC5NC5NjKJTN\n+9lfmRuo83OHjs9FuMD/SsQAT5hCtgZS3wh0eHjiT84zDwCeBMQWrXBB8BySC24y\nBD5ZcEuRAoGBAO+p+lBI86QODtPUu2KBhN5knbK/6QMWxOZsf2VuHCsIcU+iBVVz\nB/Zf08K+Cx+Jzh7j9dA3RrzYl7wEZSyVqk4sTTZbvH6BoHVJqChjuCJdH/j2d7Rs\neHM8z2CMoJrao11uBpo/wT59500McVtwnyvkjDRSPVFZOuU9YcnjYBVXAoGBAOOC\n36vI1QrvOivjYWoBh7TX71CCsqRenNqPnaXKf2BlQgJY0Zb9r/mI+y7RV4gb7YRB\n6cENpuZHRDJCQ31RQ4SvTPI7uEaEBogCNEIA6odxPx6bYfcIEQRw0l1HFDscvlnb\n4nQ/jWD0D7IsKNL122wCH5hrymA1YB1WmSTCABqJAoGAVh3w2PptuaxnfYx6TLoX\ngUYMOFenJbn/xICGAm9fZcMh3Chu3DZ6TPhAAkEBhDKjQwxMnqXOIDt/wkqeBDg/\nOtnGYNrzz01K1/pAl0rFtmtZ+r6tYsJ7QYU/SwUdDKe1ffP0IWb5TDg3bcMj1GSS\nfVYhXweSCvISLJ8yzTWLp/8CgYAjpE4cIGNXyjCHzaBmNgUnjKieKUuJOpVCHDur\nTHT2Cgb0TSvQhr+5zP7kz8DxvsZP8O+I4fWin8mMQhtGl6OHNttMG5T73xUS252K\nNZCIVXJ4/giz5Zyc4HvkRw1hUVh0xWDNq2MfrDyFQivHGOMeIZsHiuNyfQoorndh\nbc8MWQKBgCNI2KlZIWxhHjkk/blPRs0dhRhxYxauVuVSvjfS29wJ4o2QVrC2BwLi\njh4WAb3ZaXBr121+AsBko8BIDIYG8TDwd03cj0Z1LCP9/0i4XcTmXnMz2dA53deT\nBZ1lg0JgVPU3oaHDUm+1xFenBO+l/Lv46jLpvs4Hgf7nLULlIfAB\n-----END RSA PRIVATE KEY-----\n"
-    # }]
     log_analytics_workspace = {
         name = dependency.kvacr.outputs.log_analytics_workspace_name
         resource_group_name = dependency.kvacr.outputs.resource_group_name

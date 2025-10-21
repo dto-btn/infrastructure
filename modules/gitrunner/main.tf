@@ -37,7 +37,7 @@ resource "azurerm_container_app_environment" "containerAppEnv" {
 }
 
 resource "azurerm_key_vault_secret" "pemFile" {
-  name = "github-app-pem"
+  name = "githubrunnerpem"
   value = file("${var.github-app-pem-file-path}")
   key_vault_id = var.key_vault.id
   # content_type = "application/x-pem-file"
@@ -57,7 +57,7 @@ resource "azurerm_container_registry_task" "buildImage" {
   }
 }
 
-#how to ensure this doesn't builds a new image if not needed.  tags just overwrite don't they?
+# how to ensure this doesn't builds a new image if not needed.  tags just overwrite don't they?
 resource "azurerm_container_registry_task_schedule_run_now" "runtask" {
   container_registry_task_id = azurerm_container_registry_task.buildImage.id
 }
@@ -80,6 +80,16 @@ resource "azurerm_role_assignment" "runnerIdentityRoleKeyVault" {
   principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.principal_id
 }
 
+resource "azurerm_key_vault_access_policy" "runnerIdentityAccessPolicy" {
+  key_vault_id = data.azurerm_key_vault.kv.id
+  tenant_id    = data.azurerm_key_vault.kv.tenant_id
+  object_id    = azurerm_user_assigned_identity.gitActionRunnerIdentity.principal_id
+
+  secret_permissions = [
+    "Get", "List"
+  ]
+}
+
 resource "azurerm_container_app_job" "containerAppJob" {
   depends_on = [ azurerm_container_registry_task_schedule_run_now.runtask, azurerm_role_assignment.runnerIdentityRoleKeyVault, azurerm_role_assignment.runnerIdentityRoleACRPull ]
   name                         = "${var.cae_job_name}"
@@ -95,9 +105,6 @@ resource "azurerm_container_app_job" "containerAppJob" {
   }
   secret {
     name = "pem"
-    #this is not successful.  How do i reference a newly created keyvault secret?
-    # https://stackoverflow.com/questions/71041573/azurerm-keyvault-nested-item-should-contain-2-or-3-segments-got-10
-    # read this when im back.  could be a clue
     key_vault_secret_id = azurerm_key_vault_secret.pemFile.id
     identity = azurerm_user_assigned_identity.gitActionRunnerIdentity.id
   }
@@ -149,4 +156,20 @@ resource "azurerm_container_app_job" "containerAppJob" {
       memory = "4Gi"
     }
   }
+}
+
+output "resource_id_versionless" {
+  value = azurerm_key_vault_secret.pemFile.resource_id
+}
+
+output "resource_id" {
+  value = azurerm_key_vault_secret.pemFile.resource_versionless_id
+}
+
+output "id_secret" {
+  value = azurerm_key_vault_secret.pemFile.id
+}
+
+output "versionless_id_secret" {
+  value = azurerm_key_vault_secret.pemFile.versionless_id
 }
