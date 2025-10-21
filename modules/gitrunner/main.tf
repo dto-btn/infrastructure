@@ -157,19 +157,3 @@ resource "azurerm_container_app_job" "containerAppJob" {
     }
   }
 }
-
-output "resource_id_versionless" {
-  value = azurerm_key_vault_secret.pemFile.resource_id
-}
-
-output "resource_id" {
-  value = azurerm_key_vault_secret.pemFile.resource_versionless_id
-}
-
-output "id_secret" {
-  value = azurerm_key_vault_secret.pemFile.id
-}
-
-output "versionless_id_secret" {
-  value = azurerm_key_vault_secret.pemFile.versionless_id
-}
