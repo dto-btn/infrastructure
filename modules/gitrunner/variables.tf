@@ -13,9 +13,9 @@ variable "key_vault" {
     description = "Existing KeyVault to create secrets"
     type = object({
       name = string
-      id = string
+    #   id = string
       resource_group_name = string
-      resource_group_id = string
+    #   resource_group_id = string
     })
 }
 
@@ -152,10 +152,15 @@ variable "GITHUB_APP_INSTALLATION_ID" {
     type = string
 }
 
-variable "github-app-pem-file-path" {
+variable "GITHUB_APP_PEM_KEYVAULT_NAME" {
+    description = "Name of secret where PEM is stored. In existing keyvault, listed above."
     type = string
-    description = "Filepath of where the PEM file is located on whichever machine terragrunt runs from"
 }
+
+# variable "github-app-pem-file-path" {
+#     type = string
+#     description = "Filepath of where the PEM file is located on whichever machine terragrunt runs from"
+# }
 
 ################################################################################
 ######### Managed user identity for certain activities #########################

@@ -36,11 +36,16 @@ resource "azurerm_container_app_environment" "containerAppEnv" {
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logAnalytics.id
 }
 
-resource "azurerm_key_vault_secret" "pemFile" {
-  name = "githubrunnerpem"
-  value = file("${var.github-app-pem-file-path}")
-  key_vault_id = var.key_vault.id
-  # content_type = "application/x-pem-file"
+# resource "azurerm_key_vault_secret" "pemFile" {
+#   name = "githubrunnerpem"
+#   value = file("${var.github-app-pem-file-path}")
+#   key_vault_id = var.key_vault.id
+#   # content_type = "application/x-pem-file"
+# }
+
+data "azurerm_key_vault_secret" "pemFile" {
+  key_vault_id = data.azurerm_key_vault.kv.id
+  name = var.GITHUB_APP_PEM_KEYVAULT_NAME
 }
 
 resource "azurerm_container_registry_task" "buildImage" {
@@ -75,7 +80,7 @@ resource "azurerm_role_assignment" "runnerIdentityRoleACRPull" {
 }
 
 resource "azurerm_role_assignment" "runnerIdentityRoleKeyVault" {
-  scope                = azurerm_key_vault_secret.pemFile.resource_id
+  scope                = data.azurerm_key_vault_secret.pemFile.resource_id
   role_definition_name   = "Key Vault Secrets User" 
   principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.principal_id
 }
@@ -105,7 +110,7 @@ resource "azurerm_container_app_job" "containerAppJob" {
   }
   secret {
     name = "pem"
-    key_vault_secret_id = azurerm_key_vault_secret.pemFile.id
+    key_vault_secret_id = data.azurerm_key_vault_secret.pemFile.id
     identity = azurerm_user_assigned_identity.gitActionRunnerIdentity.id
   }
   dynamic "secret" {

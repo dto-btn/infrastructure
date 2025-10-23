@@ -34,11 +34,11 @@ inputs = {
     acr_image_env_var = [
         {
             "name": "CLIENT_ID",
-            "value": "Iv23liUSavN8izwHxrgV"
+            "value": "Iv23lijrPzVx10OnWRaB"
         },
         {
             "name": "INSTALLATION_ID",
-            "value": "87587800"
+            "value": "91290353"
         },
         {
             "name":"PEM",
@@ -55,22 +55,23 @@ inputs = {
     ],
 
     #for KEDA scale meta data property
-    GITHUB_APP_ID = "2013936"
-    GITHUB_APP_INSTALLATION_ID = "87587800"
+    GITHUB_APP_ID = "2165312"
+    GITHUB_APP_INSTALLATION_ID = "91290353"
+    GITHUB_APP_PEM_KEYVAULT_NAME = "githubrunnerpem"
 
     #target
     github_repo_names = "tfrunnertest"
     github_owner = "dto-btn"
     runner_scope = "org"
-    github-app-pem-file-path = "C:/odt/gitrunnertestdto-private-key.pem"
+    # github-app-pem-file-path = "C:/odt/gitrunnertestdto-private-key.pem"
 
     user_assigned_identity_name = "action-runner-identity"
     
     key_vault = {
         name = dependency.kvacr.outputs.key_vault_name
         resource_group_name = dependency.kvacr.outputs.resource_group_name
-        resource_group_id = dependency.kvacr.outputs.resource_group_id
-        id = dependency.kvacr.outputs.key_vault_id
+        # resource_group_id = dependency.kvacr.outputs.resource_group_id
+        # id = dependency.kvacr.outputs.key_vault_id
     }
 
     log_analytics_workspace = {
