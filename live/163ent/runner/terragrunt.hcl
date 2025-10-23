@@ -68,15 +68,15 @@ inputs = {
     user_assigned_identity_name = "action-runner-identity"
     
     key_vault = {
-        name = dependency.kvacr.outputs.key_vault_name
-        resource_group_name = dependency.kvacr.outputs.resource_group_name
+        name = "G3PcCKV-SSC-CIOA-0452-kv"
+        resource_group_name = "G3Pc-SSC_CIOAssistant_Keyvault-rg"
         # resource_group_id = dependency.kvacr.outputs.resource_group_id
         # id = dependency.kvacr.outputs.key_vault_id
     }
 
     log_analytics_workspace = {
-        name = dependency.kvacr.outputs.log_analytics_workspace_name
-        resource_group_name = dependency.kvacr.outputs.resource_group_name
+        name = "G3PcCLD-SSC-CIOAssistant-3a7e5ed3-law"
+        resource_group_name = "G3Pc-SSC_CIOAssistant_Logs-rg"
     }
     
     subscription_id = "dd7b6f23-7cf4-4598-a0ba-55888cfb1616"
