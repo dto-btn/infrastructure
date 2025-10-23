@@ -17,8 +17,8 @@ inputs = {
 
     #acr
     acr = {
-        name = dependency.kvacr.outputs.acr_name
-        resource_group_name = dependency.kvacr.outputs.resource_group_name
+        name = "dtoent"
+        resource_group_name = "G3Pc-SSC_CIOAssistant_Project-rg"
     }
     acr_image_repo_name = "githubrunnerimage"
     acr_image_repo_tag = "latest"
