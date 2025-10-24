@@ -1,13 +1,13 @@
 generate "terraform" {
   path      = "terraform.tf"
   if_exists = "overwrite"
-  contents  = file("./common/terraform.tf")
+  contents  = file("../common/terraform.tf")
 }
 
 generate "provider" {
     path      = "provider.tf"
     if_exists = "overwrite"
-    contents  = file("./common/provider.tf")
+    contents  = file("../common/provider.tf")
     # contents = <<EOF
     #             provider "azurerm" {
     #                 resource_provider_registrations = "none"
@@ -40,21 +40,20 @@ terraform {
     }
 }
 
+inputs = {
+    # env = "Sandbox"
+    # name_prefix = "ScSc-CIO_ECT"
+}
 remote_state {
     backend = "azurerm"
     config = {
         key = "${path_relative_to_include()}/terraform.tfstate"
-        resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
-        storage_account_name = "ectinfra"
+        resource_group_name = "G3Pc-SSC_CIOAssistant_Project-rg"
+        storage_account_name = "g3pcssca0df13eff"
         container_name = "tfstate"
     }
     generate = {
         path      = "backend.tf"
         if_exists = "overwrite_terragrunt"
     }
-}
-
-inputs = {
-    # env = "Sandbox"
-    # name_prefix = "ScSc-CIO_ECT"
 }
