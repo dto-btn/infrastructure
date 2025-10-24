@@ -86,18 +86,3 @@ include "root" {
    path   = find_in_parent_folders("root.hcl")
    expose = true
 }
-
-
-remote_state {
-    backend = "azurerm"
-    config = {
-        key = "${path_relative_to_include()}/terraform.tfstate"
-        resource_group_name = "GcDc-CTO_RPA_Project-rg"
-        storage_account_name = "gcdaaconfig"
-        container_name = "tfstate"
-    }
-    generate = {
-        path      = "backend.tf"
-        if_exists = "overwrite_terragrunt"
-    }
-}
