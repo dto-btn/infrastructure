@@ -2,9 +2,9 @@ terraform {
     source = "../../../modules//gitrunner"
 }
 
-dependency "kvacr" {
-    config_path = "../global"
-}
+# dependency "kvacr" {
+#     config_path = "../global"
+# }
 
 inputs = {
     resource_group = "G3Pc-SSC_CIOAssistant_Project-rg"
@@ -17,7 +17,7 @@ inputs = {
 
     #acr
     acr = {
-        name = "dtoent"
+        name = "G3PcCCRregistryRegistry"
         resource_group_name = "G3Pc-SSC_CIOAssistant_Project-rg"
     }
     acr_image_repo_name = "githubrunnerimage"
@@ -60,7 +60,7 @@ inputs = {
     GITHUB_APP_PEM_KEYVAULT_NAME = "githubrunnerpem"
 
     #target
-    github_repo_names = "tfrunnertest"
+    github_repo_names = "ssc-assistant"
     github_owner = "dto-btn"
     runner_scope = "org"
     # github-app-pem-file-path = "C:/odt/gitrunnertestdto-private-key.pem"
@@ -68,10 +68,8 @@ inputs = {
     user_assigned_identity_name = "action-runner-identity"
     
     key_vault = {
-        name = "G3PcCKV-SSC-CIOA-0452-kv"
-        resource_group_name = "G3Pc-SSC_CIOAssistant_Keyvault-rg"
-        # resource_group_id = dependency.kvacr.outputs.resource_group_id
-        # id = dependency.kvacr.outputs.key_vault_id
+        name = "G3PcCKV-SSC-CIOA-0df1-kv"
+        resource_group_name = "G3Pc-SSC_CIOAssistant_Project-rg"
     }
 
     log_analytics_workspace = {

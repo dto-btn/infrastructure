@@ -60,6 +60,7 @@ resource "azurerm_container_registry_task" "buildImage" {
     context_access_token = "${var.github-action-runner-image.context_access_token}"
     image_names = ["${var.acr_image_repo_name}"]
   }
+  agent_pool_name = "agentpool1"
 }
 
 # how to ensure this doesn't builds a new image if not needed.  tags just overwrite don't they?
@@ -85,22 +86,12 @@ resource "azurerm_role_assignment" "runnerIdentityRoleKeyVault" {
   principal_id         = azurerm_user_assigned_identity.gitActionRunnerIdentity.principal_id
 }
 
-resource "azurerm_key_vault_access_policy" "runnerIdentityAccessPolicy" {
-  key_vault_id = data.azurerm_key_vault.kv.id
-  tenant_id    = data.azurerm_key_vault.kv.tenant_id
-  object_id    = azurerm_user_assigned_identity.gitActionRunnerIdentity.principal_id
-
-  secret_permissions = [
-    "Get", "List"
-  ]
-}
-
 resource "azurerm_container_app_job" "containerAppJob" {
   depends_on = [ azurerm_container_registry_task_schedule_run_now.runtask, azurerm_role_assignment.runnerIdentityRoleKeyVault, azurerm_role_assignment.runnerIdentityRoleACRPull ]
   name                         = "${var.cae_job_name}"
   location                     = data.azurerm_resource_group.rg.location
   resource_group_name          = data.azurerm_resource_group.rg.name
-  container_app_environment_id = var.use_existing_cae ? data.azurerm_container_registry.acr.id : azurerm_container_app_environment.containerAppEnv[0].id
+  container_app_environment_id = var.use_existing_cae ? data.azurerm_container_app_environment.containerAppEnvExisting[0].id : azurerm_container_app_environment.containerAppEnv[0].id
 
   replica_timeout_in_seconds = 1800
   replica_retry_limit        = 0
@@ -162,3 +153,8 @@ resource "azurerm_container_app_job" "containerAppJob" {
     }
   }
 }
+
+# Note: Ran manually by the cloud ops team, we don't have sufficient privileges to do this on our own.
+# resource "azurerm_resource_provider_registration" "microsoft_app" {
+#   name = "Microsoft.App"
+# }

@@ -15,9 +15,9 @@ variable "tenant_id" {
 }
 
 #used to apply default access policies
-variable "key_vault_access_policies" {
-    type = object({
-        object_id = string
-        permissions = string
-    })
-}
+# variable "key_vault_access_policies" {
+#     type = object({
+#         object_id = string
+#         permissions = string
+#     })
+# }
