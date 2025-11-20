@@ -18,10 +18,6 @@ provider "azurerm" {
 }
 
 locals {
-  permissions = {
-    for a in var.permissions :
-    a.name => a
-  }
 
   group_principals = {
     for a in var.permissions : a.principal_name => a

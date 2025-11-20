@@ -9,6 +9,6 @@ variable "permissions" {
     name = string
     principal_type = string
     principal_name = string
-    role_definitions = string #should this be list?
+    role_definition = string #should this be list?
   }))
 }
