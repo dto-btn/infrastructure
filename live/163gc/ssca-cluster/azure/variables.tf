@@ -5,7 +5,3 @@ variable "subscription_id" {
 variable "resource_group" {
   type = string
 }
-
-variable "acr_id" {
-  type = string
-}
