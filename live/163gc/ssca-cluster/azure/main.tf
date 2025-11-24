@@ -17,8 +17,22 @@ provider "azurerm" {
     }
 }
 
-data "azurerm_resource_group" "rg" {
-    name = var.resource_group
+//this to change if aurora takes over.  Won't have this rg
+//If we keep container apps, then move into ssca rg?
+resource "azurerm_resource_group" "rg" {
+    name = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG" 
+    location = "canadacentral"
+}
+
+//change this to reference from terraform_remote_state output from shared
+data "azurerm_container_registry" "acr" {
+  name                = ""
+  resource_group_name = ""
+}
+
+data "azurerm_log_analytics_workspace" "logAnalytics" {
+  name = ""
+  resource_group_name = ""
 }
 
 output "output" {
