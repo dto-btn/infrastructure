@@ -9,7 +9,7 @@ terraform {
 
 provider "azurerm" {
     resource_provider_registrations = "none"
-    subscription_id = var.subscription_id
+    subscription_id = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
     features {
         resource_group {
             prevent_deletion_if_contains_resources = false
@@ -26,13 +26,13 @@ resource "azurerm_resource_group" "rg" {
 
 //change this to reference from terraform_remote_state output from shared
 data "azurerm_container_registry" "acr" {
-  name                = ""
-  resource_group_name = ""
+  name                = "dtoacr"
+  resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
 }
 
 data "azurerm_log_analytics_workspace" "logAnalytics" {
-  name = ""
-  resource_group_name = ""
+  name = "ScSc-CIO-ECT-Infra-analytics"
+  resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
 }
 
 output "output" {
