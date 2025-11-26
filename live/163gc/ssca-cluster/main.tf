@@ -8,7 +8,7 @@ module "dev" {
     resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
     image = {
       repo_name = "ssca-mcp-server"
-      tag = "v1"
+      tag = "1.0"
     }
   }
   log_analytics = {
@@ -17,8 +17,7 @@ module "dev" {
   }
   container_app_environment_name = "ssca-cae"
   container_app = {
-    name = "ssca-cae"
+    name = "ssca-mcp-server"
     revision_mode = "Single"
-    container_name = "ssca-mcp-server"
   }
 }

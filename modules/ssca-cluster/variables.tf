@@ -38,6 +38,5 @@ variable "container_app" {
   type = object({
     name = string
     revision_mode = string
-    container_name = string
   })
 }

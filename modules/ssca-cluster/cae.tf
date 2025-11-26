@@ -25,9 +25,20 @@ resource "azurerm_container_app" "containerApp" {
   template {
     container {
       image = "${data.azurerm_container_registry.acr.login_server}/${var.acr.image.repo_name}:${var.acr.image.tag}"
-      name  = var.container_app.container_name
+      name  = var.container_app.name
       cpu    = 2
       memory = "4Gi"
+    }
+  }
+
+  ingress {
+    external_enabled = true
+    client_certificate_mode = "ignore"
+    target_port = 8000
+    transport = "auto"
+    traffic_weight {
+      latest_revision = true
+      percentage = 100
     }
   }
 }
