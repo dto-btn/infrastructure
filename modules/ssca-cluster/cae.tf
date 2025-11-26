@@ -1,5 +1,5 @@
 resource "azurerm_container_app_environment" "containerAppEnv" {
-  name                       = "ssca-cae"
+  name                       = var.container_app_environment_name
   location                   = azurerm_resource_group.rg.location
   resource_group_name        = azurerm_resource_group.rg.name
   logs_destination          = "log-analytics"
@@ -7,14 +7,14 @@ resource "azurerm_container_app_environment" "containerAppEnv" {
 }
 
 resource "azurerm_container_app" "containerApp" {
-  name                         = "mcp-server"
+  name                         = var.container_app.name
   container_app_environment_id = azurerm_container_app_environment.containerAppEnv.id
   resource_group_name          = azurerm_resource_group.rg.name
-  revision_mode                = "Single"
+  revision_mode                = var.container_app.revision_mode
 
   registry{
     identity = azurerm_user_assigned_identity.mcpImageIdentity.id
-    server = "dtoacr.azurecr.io"
+    server = data.azurerm_container_registry.acr.login_server
   }
 
   identity{
@@ -24,8 +24,8 @@ resource "azurerm_container_app" "containerApp" {
 
   template {
     container {
-      image = "dtoacr.azurecr.io/ssca-mcp-server:v1"
-      name  = "ssca-mcp-server"
+      image = "${data.azurerm_container_registry.acr.login_server}/${var.acr.image.repo_name}:${var.acr.image.tag}"
+      name  = var.container_app.container_name
       cpu    = 2
       memory = "4Gi"
     }
