@@ -20,4 +20,6 @@ module "dev" {
     name = "ssca-mcp-server"
     revision_mode = "Single"
   }
+  subscription_id = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
+  app_registation_name = "SSC-Assistant-Dev"
 }

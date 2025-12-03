@@ -44,3 +44,7 @@ variable "container_app" {
 variable "app_registation_name" {
   type = string
 }
+
+variable "subscription_id" {
+  type = string
+}

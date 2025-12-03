@@ -32,6 +32,7 @@ resource "azurerm_container_app" "containerApp" {
   }
 
   ingress {
+    allow_insecure_connections = false
     external_enabled = true
     client_certificate_mode = "ignore"
     target_port = 8000
@@ -40,60 +41,71 @@ resource "azurerm_container_app" "containerApp" {
       latest_revision = true
       percentage = 100
     }
+    cors {
+      allow_credentials_enabled = false
+      allowed_headers           = ["*"]
+      allowed_methods           = []
+      allowed_origins           = ["http://localhost:8080"]
+      exposed_headers           = []
+      max_age_in_seconds        = 0
+    }
   }
 }
 
-data "azuread_application" "container_app_auth" {
+data "azurerm_subscription" "current" {
+  subscription_id = var.subscription_id
+}
+
+data "azuread_application" "container_app_app_reg" {
   display_name = var.app_registation_name
 }
 
 resource "azapi_resource_action" "container_app_auth_settings" {
-  type      = "Microsoft.App/containerApps/authConfigs"
+  type      = "Microsoft.App/containerApps/authConfigs@2025-02-02-preview"
   resource_id = "${azurerm_container_app.containerApp.id}/authConfigs/current"
 
-  # Use PATCH to only update auth section
-  method = "PATCH" #or patch?
+  method = "PUT" 
 
-  body = jsonencode({
-    "properties": {
-          "platform": {
-              "enabled": true
+  body = {
+    properties: {
+          platform: {
+              enabled: true
           },
-          "globalValidation": {
-              "unauthenticatedClientAction": "RedirectToLoginPage",
-              "redirectToProvider": "azureactivedirectory",
-              "excludedPaths": []
+          globalValidation: {
+              unauthenticatedClientAction: "RedirectToLoginPage",
+              redirectToProvider: "azureactivedirectory",
+              excludedPaths: []
           },
-          "identityProviders": {
-              "azureActiveDirectory": {
-                  "registration": {
-                      "openIdIssuer": "https://sts.windows.net/d05bc194-94bf-4ad6-ae2e-1db0f2e38f5e/v2.0",
-                      "clientId": "5e945d23-48d9-4929-b1a1-93a9ca58f8aa",
-                      "clientSecretSettingName": "microsoft-provider-authentication-secret"
+          identityProviders: {
+              azureActiveDirectory: {
+                  registration: {
+                      openIdIssuer: "https://sts.windows.net/${data.azurerm_subscription.current.tenant_id}/v2.0",
+                      clientId: data.azuread_application.container_app_app_reg.client_id,
+                      clientSecretSettingName: "microsoft-provider-authentication-secret"
                   },
-                  "validation": {
-                      "allowedAudiences": [
-                          "api://5e945d23-48d9-4929-b1a1-93a9ca58f8aa"
+                  validation: {
+                      allowedAudiences: [
+                          "api://${data.azuread_application.container_app_app_reg.client_id}"
                       ],
-                      "defaultAuthorizationPolicy": {
-                          "allowedPrincipals": {},
-                          "allowedApplications": [
-                              "5e945d23-48d9-4929-b1a1-93a9ca58f8aa"
+                      defaultAuthorizationPolicy: {
+                          allowedPrincipals: {},
+                          allowedApplications: [
+                              "${data.azuread_application.container_app_app_reg.client_id}"
                           ]
                       }
                   },
-                  "isAutoProvisioned": false
+                  isAutoProvisioned: false
               }
           },
-          "login": {
-              "routes": {},
-              "preserveUrlFragmentsForLogins": false,
-              "cookieExpiration": {},
-              "nonce": {}
+          login: {
+              routes: {},
+              preserveUrlFragmentsForLogins: false,
+              cookieExpiration: {},
+              nonce: {}
           },
-          "encryptionSettings": {}
+          encryptionSettings: {}
     }
-  })
+  }
 }
 
 resource "azurerm_container_app" "testcontainerApp" {
