@@ -40,3 +40,11 @@ variable "container_app" {
     revision_mode = string
   })
 }
+
+variable "app_registation_name" {
+  type = string
+}
+
+variable "subscription_id" {
+  type = string
+}
