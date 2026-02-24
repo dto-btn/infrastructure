@@ -1,9 +1,18 @@
 # variable "subscription_id" {
 #   type = string
 # }
-
 variable "resource_group" {
   type = string
+}
+
+variable "create_resource_group" {
+  type = bool
+  default = true
+}
+
+variable "create_container_app_env" {
+  type = bool
+  default = true
 }
 
 variable "location" {
