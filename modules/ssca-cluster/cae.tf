@@ -13,17 +13,24 @@ resource "azuread_application_password" "containerAppSecret" {
 }
 
 resource "azurerm_container_app_environment" "containerAppEnv" {
+  count                      = var.create_container_app_env ? 1 : 0
   name                       = var.container_app_environment_name
-  location                   = azurerm_resource_group.rg.location
-  resource_group_name        = azurerm_resource_group.rg.name
+  location                   = local.rg_location
+  resource_group_name        = local.rg_name
   logs_destination          = "log-analytics"
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logAnalytics.id
 }
 
+data "azurerm_container_app_environment" "containerAppEnv" {
+  count               = var.create_container_app_env ? 0 : 1
+  name                = var.container_app_environment_name
+  resource_group_name = local.rg_name
+}
+
 resource "azurerm_container_app" "containerApp" {
   name                         = var.container_app.name
-  container_app_environment_id = azurerm_container_app_environment.containerAppEnv.id
-  resource_group_name          = azurerm_resource_group.rg.name
+  container_app_environment_id = local.cae_id
+  resource_group_name          = local.rg_name
   revision_mode                = var.container_app.revision_mode
 
   registry{

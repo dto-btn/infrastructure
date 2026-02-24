@@ -2,6 +2,8 @@ module "dev" {
   source = "../../../modules/ssca-cluster"
 
   resource_group = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG"
+  create_resource_group = true
+  create_container_app_env = true
   location = "canadacentral"
   acr = {
     name = "ectacr"
@@ -28,6 +30,8 @@ module "geds" {
   source = "../../../modules/ssca-cluster"
 
   resource_group = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG"
+  create_resource_group = false
+  create_container_app_env = false
   location = "canadacentral"
   acr = {
     name = "ectacr"
@@ -54,6 +58,8 @@ module "pmcoe" {
   source = "../../../modules/ssca-cluster"
 
   resource_group = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG"
+  create_resource_group = false
+  create_container_app_env = false
   location = "canadacentral"
   acr = {
     name = "ectacr"
@@ -80,6 +86,8 @@ module "myssc" {
   source = "../../../modules/ssca-cluster"
 
   resource_group = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG"
+  create_resource_group = false
+  create_container_app_env = false
   location = "canadacentral"
   acr = {
     name = "ectacr"
