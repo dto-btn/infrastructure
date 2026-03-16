@@ -45,8 +45,9 @@ variable "container_app_environment_name" {
 
 variable "container_app" {
   type = object({
-    name = string
+    name          = string
     revision_mode = string
+    min_replicas  = optional(number, 0)
   })
 }
 
