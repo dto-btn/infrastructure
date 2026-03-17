@@ -20,7 +20,7 @@ geds_mcp_secrets = {
 
 # pmcoe-mcp settings (Template)
 pmcoe_mcp_env_vars = {
-  AZURE_SEARCH_INDEX_NAME        = "pmcoe-index"
+  AZURE_SEARCH_INDEX_NAME         = "pmcoe-index"
   AZURE_SEARCH_KEY_FIELD          = "chunk_id"
   AZURE_SEARCH_CONTENT_FIELD      = "chunk"
   AZURE_SEARCH_VECTOR_FIELD       = "text_vector"
@@ -33,12 +33,12 @@ pmcoe_mcp_env_vars = {
 
 pmcoe_mcp_secrets = {
   AZURE_SEARCH_SERVICE_ENDPOINT = "https://<service-name>.search.windows.net"
-  AZURE_SEARCH_API_KEY = "<INSERT_API_KEY_HERE>"
+  AZURE_SEARCH_API_KEY          = "<INSERT_API_KEY_HERE>"
 }
 
 # myssc-mcp settings (Template)
 myssc_mcp_env_vars = {
-  AZURE_SEARCH_INDEX_NAME        = "myssc-index"
+  AZURE_SEARCH_INDEX_NAME         = "myssc-index"
   AZURE_SEARCH_KEY_FIELD          = "id"
   AZURE_SEARCH_CONTENT_FIELD      = "chunk"
   AZURE_SEARCH_SEMANTIC_CONFIG    = "mySemanticConfig"
@@ -50,7 +50,7 @@ myssc_mcp_env_vars = {
 
 myssc_mcp_secrets = {
   AZURE_SEARCH_SERVICE_ENDPOINT = "https://<service-name>.search.windows.net"
-  AZURE_SEARCH_API_KEY = "<INSERT_API_KEY_HERE>"
+  AZURE_SEARCH_API_KEY          = "<INSERT_API_KEY_HERE>"
 }
 
 # bits-mcp settings (Template)
