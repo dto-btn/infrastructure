@@ -78,6 +78,21 @@ resource "azurerm_container_app" "containerApp" {
           secret_name = lower(replace(env.key, "_", "-"))
         }
       }
+
+      readiness_probe {
+        transport = "TCP"
+        port      = var.container_app.target_port
+      }
+
+      liveness_probe {
+        transport = "TCP"
+        port      = var.container_app.target_port
+      }
+
+      startup_probe {
+        transport = "TCP"
+        port      = var.container_app.target_port
+      }
     }
 
     min_replicas = var.container_app.min_replicas
@@ -85,10 +100,10 @@ resource "azurerm_container_app" "containerApp" {
 
   ingress {
     allow_insecure_connections = false
-    external_enabled = true
-    client_certificate_mode = "ignore"
-    target_port = 8000
-    transport = "auto"
+    external_enabled           = true
+    client_certificate_mode    = "ignore"
+    target_port                = var.container_app.target_port
+    transport                  = "auto"
     traffic_weight {
       latest_revision = true
       percentage = 100

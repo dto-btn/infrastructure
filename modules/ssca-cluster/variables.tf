@@ -48,6 +48,7 @@ variable "container_app" {
     name          = string
     revision_mode = string
     min_replicas  = optional(number, 0)
+    target_port   = optional(number, 8000)
   })
 }
 
