@@ -9,18 +9,17 @@ ssca_mcp_secrets = {
 
 # geds-mcp settings (Template)
 geds_mcp_env_vars = {
-  GEDS_API_URL = "https://api.example.gc.ca/gapi/v2"
   HOST         = "0.0.0.0"
   PORT         = "8000"
 }
 
 geds_mcp_secrets = {
+  GEDS_API_URL   = "https://api.example.gc.ca/gapi/v2"
   GEDS_API_TOKEN = "<INSERT_TOKEN_HERE>"
 }
 
 # pmcoe-mcp settings (Template)
 pmcoe_mcp_env_vars = {
-  AZURE_SEARCH_SERVICE_ENDPOINT = "https://<service-name>.search.windows.net"
   AZURE_SEARCH_INDEX_NAME        = "pmcoe-index"
   AZURE_SEARCH_KEY_FIELD          = "chunk_id"
   AZURE_SEARCH_CONTENT_FIELD      = "chunk"
@@ -33,12 +32,12 @@ pmcoe_mcp_env_vars = {
 }
 
 pmcoe_mcp_secrets = {
+  AZURE_SEARCH_SERVICE_ENDPOINT = "https://<service-name>.search.windows.net"
   AZURE_SEARCH_API_KEY = "<INSERT_API_KEY_HERE>"
 }
 
 # myssc-mcp settings (Template)
 myssc_mcp_env_vars = {
-  AZURE_SEARCH_SERVICE_ENDPOINT = "https://<service-name>.search.windows.net"
   AZURE_SEARCH_INDEX_NAME        = "myssc-index"
   AZURE_SEARCH_KEY_FIELD          = "id"
   AZURE_SEARCH_CONTENT_FIELD      = "chunk"
@@ -50,6 +49,7 @@ myssc_mcp_env_vars = {
 }
 
 myssc_mcp_secrets = {
+  AZURE_SEARCH_SERVICE_ENDPOINT = "https://<service-name>.search.windows.net"
   AZURE_SEARCH_API_KEY = "<INSERT_API_KEY_HERE>"
 }
 
@@ -57,11 +57,11 @@ myssc_mcp_secrets = {
 bits_mcp_env_vars = {
   FASTMCP_HOST     = "0.0.0.0"
   FASTMCP_PORT     = "8000"
-  BITS_DB_DATABASE = "db-name"
   BITS_DB_USERNAME = "ReadOnlyUser"
 }
 
 bits_mcp_secrets = {
+  BITS_DB_DATABASE = "db-name"
   BITS_DB_SERVER = "sql-server-name.database.windows.net:port"
   BITS_DB_PWD    = "<INSERT_PASSWORD_HERE>"
 }
