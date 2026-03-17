@@ -58,3 +58,15 @@ variable "app_registation_name" {
 variable "subscription_id" {
   type = string
 }
+
+variable "env_vars" {
+  type        = map(string)
+  description = "A map of environment variables to pass to the container app"
+  default     = {}
+}
+
+variable "secrets" {
+  type        = map(string)
+  description = "A map of secrets to pass to the container app. Key is the env var name, value is the secret value."
+  default     = {}
+}

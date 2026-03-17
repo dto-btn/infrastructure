@@ -24,6 +24,9 @@ module "dev" {
   }
   subscription_id = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
   app_registation_name = "SSC-Assistant-Dev"
+
+  env_vars = var.ssca_mcp_env_vars
+  secrets  = var.ssca_mcp_secrets
 }
 
 module "geds" {
@@ -52,6 +55,9 @@ module "geds" {
   }
   subscription_id = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
   app_registation_name = "SSC-Assistant-Dev"
+
+  env_vars = var.geds_mcp_env_vars
+  secrets  = var.geds_mcp_secrets
 }
 
 module "pmcoe" {
@@ -80,6 +86,9 @@ module "pmcoe" {
   }
   subscription_id = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
   app_registation_name = "SSC-Assistant-Dev"
+
+  env_vars = var.pmcoe_mcp_env_vars
+  secrets  = var.pmcoe_mcp_secrets
 }
 
 module "myssc" {
@@ -108,6 +117,9 @@ module "myssc" {
   }
   subscription_id = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
   app_registation_name = "SSC-Assistant-Dev"
+
+  env_vars = var.myssc_mcp_env_vars
+  secrets  = var.myssc_mcp_secrets
 }
 
 module "bits" {
@@ -137,4 +149,7 @@ module "bits" {
   }
   subscription_id = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
   app_registation_name = "SSC-Assistant-Dev"
+
+  env_vars = var.bits_mcp_env_vars
+  secrets  = var.bits_mcp_secrets
 }
