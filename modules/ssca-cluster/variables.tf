@@ -52,7 +52,7 @@ variable "container_app" {
   })
 }
 
-variable "app_registation_name" {
+variable "app_registration_name" {
   type = string
 }
 

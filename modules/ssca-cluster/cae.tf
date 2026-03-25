@@ -3,7 +3,7 @@ data "azurerm_subscription" "current" {
 }
 
 data "azuread_application" "container_app_app_reg" {
-  display_name = var.app_registation_name
+  display_name = var.app_registration_name
 }
 
 resource "azuread_application_password" "containerAppSecret" {

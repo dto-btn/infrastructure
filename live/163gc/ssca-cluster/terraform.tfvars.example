@@ -1,10 +1,18 @@
 # ssca-mcp-server settings (Template)
 ssca_mcp_env_vars = {
-  HOST      = "0.0.0.0"
-  PORT      = "8000"
+  ENABLE_LLM_CLASSIFIER="true"
+  AZURE_OPENAI_VERSION="2024-05-01-preview"
+  ORCHESTRATOR_LLM_MODEL="gpt-4"
+  ORCHESTRATOR_LLM_TIMEOUT_SECONDS="8.0"
+  GPT40_DEPLOYMENT_NAME="gpt-4"
+  DEFAULT_DEPLOYMENT_NAME="gpt-4"
+  ORCHESTRATOR_MIN_CONFIDENCE="0.4"
 }
 
 ssca_mcp_secrets = {
+  AZURE_OPENAI_ENDPOINT="https://oai.openai.azure.com"
+  AZURE_AD_CLIENT_ID="api://<INSERT_ID_HERE>"
+  AZURE_AD_TENANT_ID="<INSERT_ID_HERE>"
 }
 
 # geds-mcp settings (Template)
