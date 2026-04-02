@@ -155,3 +155,58 @@ module "bits" {
   env_vars = var.bits_mcp_env_vars
   secrets  = var.bits_mcp_secrets
 }
+
+resource "random_password" "litellm_db_password" {
+  length           = 24
+  special          = true
+  override_special = "!#-_" # Avoids characters that cause URL encoding issues
+}
+
+module "litellm_db" {
+  source = "../../../modules/postgresql-flexible"
+
+  name                   = "ssca-litellm-db"
+  resource_group_name    = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG"
+  location               = "canadacentral"
+  administrator_login    = "litellmadmin"
+  administrator_password = random_password.litellm_db_password.result
+}
+
+module "litellm_proxy" {
+  source = "../../../modules/ssca-cluster"
+
+  resource_group           = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG"
+  create_resource_group    = false
+  create_container_app_env = false
+  location                 = "canadacentral"
+  acr = {
+    name                = "ectacr"
+    resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
+    image = {
+      repo_name = "litellm-proxy"
+      tag       = "1.0.0"
+    }
+  }
+  log_analytics = {
+    name                = "ScSc-CIO-ECT-Infra-analytics"
+    resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
+  }
+  container_app_environment_name = "ssca-cae"
+  container_app = {
+    name          = "litellm-proxy"
+    revision_mode = "Single"
+    target_port   = 4000
+    min_replicas = 1
+  }
+  subscription_id       = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
+  app_registration_name = "SSC-Assistant-Dev"
+
+  env_vars = merge({
+    "DATABASE_URL"     = "postgresql://${module.litellm_db.admin_user}:${urlencode(module.litellm_db.admin_password)}@${module.litellm_db.fqdn}:5432/${module.litellm_db.database_name}?sslmode=require"
+    "DISABLE_ADMIN_UI" = "False"
+  }, var.litellm_proxy_env_vars)
+  
+  secrets = merge(
+    var.litellm_proxy_secrets
+  )
+}

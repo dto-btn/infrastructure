@@ -1,0 +1,9 @@
+variable "name" { type = string }
+variable "resource_group_name" { type = string }
+variable "location" { type = string }
+variable "administrator_login" { type = string }
+variable "administrator_password" { type = string }
+variable "postgresql_version" { default = "16" }
+variable "storage_mb" { default = 32768 }
+variable "sku_name" { default = "B_Standard_B1ms" }
+variable "database_name" { default = "litellm_db" }
