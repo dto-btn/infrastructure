@@ -45,15 +45,29 @@ variable "container_app_environment_name" {
 
 variable "container_app" {
   type = object({
-    name = string
+    name          = string
     revision_mode = string
+    min_replicas  = optional(number, 0)
+    target_port   = optional(number, 8000)
   })
 }
 
-variable "app_registation_name" {
+variable "app_registration_name" {
   type = string
 }
 
 variable "subscription_id" {
   type = string
+}
+
+variable "env_vars" {
+  type        = map(string)
+  description = "A map of environment variables to pass to the container app"
+  default     = {}
+}
+
+variable "secrets" {
+  type        = map(string)
+  description = "A map of secrets to pass to the container app. Key is the env var name, value is the secret value."
+  default     = {}
 }

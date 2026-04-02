@@ -3,7 +3,7 @@ data "azurerm_subscription" "current" {
 }
 
 data "azuread_application" "container_app_app_reg" {
-  display_name = var.app_registation_name
+  display_name = var.app_registration_name
 }
 
 resource "azuread_application_password" "containerAppSecret" {
@@ -33,36 +33,77 @@ resource "azurerm_container_app" "containerApp" {
   resource_group_name          = local.rg_name
   revision_mode                = var.container_app.revision_mode
 
-  registry{
+  registry {
     identity = azurerm_user_assigned_identity.mcpImageIdentity.id
-    server = data.azurerm_container_registry.acr.login_server
+    server   = data.azurerm_container_registry.acr.login_server
   }
 
-  identity{
-    type = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.mcpImageIdentity.id] 
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.mcpImageIdentity.id]
   }
 
   secret {
-    name = "microsoft-provider-authentication-secret"
+    name  = "microsoft-provider-authentication-secret"
     value = azuread_application_password.containerAppSecret.value
+  }
+
+  dynamic "secret" {
+    for_each = var.secrets
+    content {
+      name  = lower(replace(secret.key, "_", "-"))
+      value = secret.value
+    }
   }
 
   template {
     container {
-      image = "${data.azurerm_container_registry.acr.login_server}/${var.acr.image.repo_name}:${var.acr.image.tag}"
-      name  = var.container_app.name
+      image  = "${data.azurerm_container_registry.acr.login_server}/${var.acr.image.repo_name}:${var.acr.image.tag}"
+      name   = var.container_app.name
       cpu    = 2
       memory = "4Gi"
+
+      dynamic "env" {
+        for_each = var.env_vars
+        content {
+          name  = env.key
+          value = env.value
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.secrets
+        content {
+          name        = env.key
+          secret_name = lower(replace(env.key, "_", "-"))
+        }
+      }
+
+      readiness_probe {
+        transport = "TCP"
+        port      = var.container_app.target_port
+      }
+
+      liveness_probe {
+        transport = "TCP"
+        port      = var.container_app.target_port
+      }
+
+      startup_probe {
+        transport = "TCP"
+        port      = var.container_app.target_port
+      }
     }
+
+    min_replicas = var.container_app.min_replicas
   }
 
   ingress {
     allow_insecure_connections = false
-    external_enabled = true
-    client_certificate_mode = "ignore"
-    target_port = 8000
-    transport = "auto"
+    external_enabled           = true
+    client_certificate_mode    = "ignore"
+    target_port                = var.container_app.target_port
+    transport                  = "auto"
     traffic_weight {
       latest_revision = true
       percentage = 100

@@ -1,0 +1,75 @@
+# ssca-mcp-server settings (Template)
+ssca_mcp_env_vars = {
+  ENABLE_LLM_CLASSIFIER="true"
+  AZURE_OPENAI_VERSION="2024-05-01-preview"
+  ORCHESTRATOR_LLM_MODEL="gpt-4"
+  ORCHESTRATOR_LLM_TIMEOUT_SECONDS="8.0"
+  GPT40_DEPLOYMENT_NAME="gpt-4"
+  DEFAULT_DEPLOYMENT_NAME="gpt-4"
+  ORCHESTRATOR_MIN_CONFIDENCE="0.4"
+}
+
+ssca_mcp_secrets = {
+  AZURE_OPENAI_ENDPOINT="https://oai.openai.azure.com"
+  AZURE_AD_CLIENT_ID="api://<INSERT_ID_HERE>"
+  AZURE_AD_TENANT_ID="<INSERT_ID_HERE>"
+}
+
+# geds-mcp settings (Template)
+geds_mcp_env_vars = {
+  HOST         = "0.0.0.0"
+  PORT         = "8000"
+}
+
+geds_mcp_secrets = {
+  GEDS_API_URL   = "https://api.example.gc.ca/gapi/v2"
+  GEDS_API_TOKEN = "<INSERT_TOKEN_HERE>"
+}
+
+# pmcoe-mcp settings (Template)
+pmcoe_mcp_env_vars = {
+  AZURE_SEARCH_INDEX_NAME         = "pmcoe-index"
+  AZURE_SEARCH_KEY_FIELD          = "chunk_id"
+  AZURE_SEARCH_CONTENT_FIELD      = "chunk"
+  AZURE_SEARCH_VECTOR_FIELD       = "text_vector"
+  AZURE_SEARCH_SEMANTIC_CONFIG    = "default-semantic-config"
+  MCP_SERVER_NAME                 = "PMCOE Search Server"
+  HOST                            = "0.0.0.0"
+  PORT                            = "8000"
+  SEARCH_TOP_RESULTS              = "4"
+}
+
+pmcoe_mcp_secrets = {
+  AZURE_SEARCH_SERVICE_ENDPOINT = "https://<service-name>.search.windows.net"
+  AZURE_SEARCH_API_KEY          = "<INSERT_API_KEY_HERE>"
+}
+
+# myssc-mcp settings (Template)
+myssc_mcp_env_vars = {
+  AZURE_SEARCH_INDEX_NAME         = "myssc-index"
+  AZURE_SEARCH_KEY_FIELD          = "id"
+  AZURE_SEARCH_CONTENT_FIELD      = "chunk"
+  AZURE_SEARCH_SEMANTIC_CONFIG    = "mySemanticConfig"
+  MCP_SERVER_NAME                 = "MySSC+ Search Server"
+  HOST                            = "0.0.0.0"
+  PORT                            = "8000"
+  SEARCH_TOP_RESULTS              = "4"
+}
+
+myssc_mcp_secrets = {
+  AZURE_SEARCH_SERVICE_ENDPOINT = "https://<service-name>.search.windows.net"
+  AZURE_SEARCH_API_KEY          = "<INSERT_API_KEY_HERE>"
+}
+
+# bits-mcp settings (Template)
+bits_mcp_env_vars = {
+  FASTMCP_HOST     = "0.0.0.0"
+  FASTMCP_PORT     = "8000"
+  BITS_DB_USERNAME = "ReadOnlyUser"
+}
+
+bits_mcp_secrets = {
+  BITS_DB_DATABASE = "db-name"
+  BITS_DB_SERVER = "sql-server-name.database.windows.net:port"
+  BITS_DB_PWD    = "<INSERT_PASSWORD_HERE>"
+}
