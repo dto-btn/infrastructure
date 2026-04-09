@@ -6,6 +6,7 @@ ssca_mcp_env_vars = {
   GPT40_DEPLOYMENT_NAME="gpt-4o"
   DEFAULT_DEPLOYMENT_NAME="gpt-4o"
   ORCHESTRATOR_MIN_CONFIDENCE=0.4
+  ORCHESTRATOR_ALLOWED_ORIGINS="https://assistant-dev.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca,https://assistant.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca"
 }
 
 ssca_mcp_secrets = {

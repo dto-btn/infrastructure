@@ -111,8 +111,8 @@ resource "azurerm_container_app" "containerApp" {
     cors {
       allow_credentials_enabled = false
       allowed_headers           = ["*"]
-      allowed_methods           = []
-      allowed_origins           = ["http://localhost:8080"]
+      allowed_methods           = ["*"]
+      allowed_origins           = var.allowed_origins
       exposed_headers           = []
       max_age_in_seconds        = 0
     }

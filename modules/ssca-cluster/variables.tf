@@ -71,3 +71,9 @@ variable "secrets" {
   description = "A map of secrets to pass to the container app. Key is the env var name, value is the secret value."
   default     = {}
 }
+
+variable "allowed_origins" {
+  type        = list(string)
+  description = "A list of allowed origins for CORS policy"
+  default     = ["http://localhost:8080"]
+}

@@ -79,6 +79,7 @@ module "dev" {
   }
   subscription_id = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
   app_registration_name = "SSC-Assistant-Dev"
+  allowed_origins       = ["http://localhost:8080", "https://assistant-dev.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca", "https://assistant.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca"]
 
   env_vars = var.ssca_mcp_env_vars
   secrets  = merge({
