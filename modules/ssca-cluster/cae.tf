@@ -135,7 +135,7 @@ resource "azapi_resource_action" "container_app_auth_settings" {
               enabled: true
           },
           globalValidation: {
-              unauthenticatedClientAction: "RedirectToLoginPage",
+              unauthenticatedClientAction: var.unauthenticated_access ? "AllowAnonymous" : "RedirectToLoginPage",
               redirectToProvider: "azureactivedirectory",
               excludedPaths: []
           },

@@ -77,3 +77,9 @@ variable "allowed_origins" {
   description = "A list of allowed origins for CORS policy"
   default     = ["http://localhost:8080"]
 }
+
+variable "unauthenticated_access" {
+  type        = bool
+  description = "Whether to allow unauthenticated access to the container app"
+  default     = false
+}

@@ -40,8 +40,9 @@ module "litellm_proxy" {
     target_port   = 4000
     min_replicas = 1
   }
-  subscription_id       = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
-  app_registration_name = "SSC-Assistant-Dev"
+  subscription_id        = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
+  app_registration_name  = "SSC-Assistant-Dev"
+  unauthenticated_access = true # Set to false for proxy because authentication is handled at the app level
 
   env_vars = merge({
     "DATABASE_URL"     = "postgresql://${module.litellm_db.admin_user}:${urlencode(module.litellm_db.admin_password)}@${module.litellm_db.fqdn}:5432/${module.litellm_db.database_name}?sslmode=require"
