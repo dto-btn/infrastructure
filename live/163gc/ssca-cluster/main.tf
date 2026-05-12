@@ -26,7 +26,7 @@ module "litellm_proxy" {
     resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
     image = {
       repo_name = "litellm-proxy"
-      tag       = "1.0.0"
+      tag       = "1.0.1"
     }
   }
   log_analytics = {
@@ -65,7 +65,7 @@ module "dev" {
     resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
     image = {
       repo_name = "ssca-mcp-server"
-      tag = "1.0.1"
+      tag = "1.0.2"
     }
   }
   log_analytics = {
