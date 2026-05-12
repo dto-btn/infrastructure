@@ -6,12 +6,12 @@ variable "resource_group" {
 }
 
 variable "create_resource_group" {
-  type = bool
+  type    = bool
   default = true
 }
 
 variable "create_container_app_env" {
-  type = bool
+  type    = bool
   default = true
 }
 
@@ -21,11 +21,11 @@ variable "location" {
 
 variable "acr" {
   type = object({
-    name = string
+    name                = string
     resource_group_name = string
     image = object({
       repo_name = string
-      tag = string
+      tag       = string
     })
   })
   description = "Existing container registry and repo values"
@@ -33,7 +33,7 @@ variable "acr" {
 
 variable "log_analytics" {
   type = object({
-    name = string
+    name                = string
     resource_group_name = string
   })
   description = "Existing log analytics workspace values"
@@ -82,4 +82,13 @@ variable "unauthenticated_access" {
   type        = bool
   description = "Whether to allow unauthenticated access to the container app"
   default     = false
+}
+
+variable "key_vault" {
+  type = object({
+    name                = string
+    resource_group_name = string
+  })
+  description = "The Key Vault details to fetch secrets from"
+  default     = null
 }

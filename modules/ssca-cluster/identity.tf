@@ -9,3 +9,10 @@ resource "azurerm_role_assignment" "mcpImageIdentityRoleACRPull" {
   role_definition_name = "AcrPull"
   principal_id         = azurerm_user_assigned_identity.mcpImageIdentity.principal_id
 }
+
+resource "azurerm_role_assignment" "container_app_kv_reader" {
+  count                = var.key_vault != null ? 1 : 0
+  scope                = data.azurerm_key_vault.kv[0].id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.mcpImageIdentity.principal_id
+}
