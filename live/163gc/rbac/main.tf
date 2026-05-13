@@ -17,38 +17,49 @@ provider "azurerm" {
     }
 }
 
+# custom role may get too complicated for our needs.  use built-in for now.  just loop through var
 locals {
 
-  group_principals = {
-    for a in var.permissions : a.principal_name => a
-    if a.principal_type == "group"
+  assignments = {
+    for a in var.permissions : "${a.principal_name}_${a.role_definition}_${a.scope_id}" => a
   }
 
-  user_principals = {
-    for a in var.permissions : a.principal_name => a
-    if a.principal_type == "user"
-  }
+#   group_principals = {
+#     for a in var.permissions : a.principal_name => a...
+#     if a.principal_type == "group"
+#   }
 
-  role_definitions = {
-    for a in var.permissions :
-    "${a.role_definition}|${a.scope_id}" => a
-  }
+#   user_principals = {
+#     for a in var.permissions : a.principal_name => a...
+#     if a.principal_type == "user"
+#   }
 
+#   #Unique role + scope pairing that needs to be defined
+#   role_definitions = {
+#     for a in var.permissions :
+#     "${a.role_definition}|${a.scope_id}" => a...
+#   }
+}
+
+#temporary. to see what objects look like after locals block.
+# output "group" {
+#   value = local.group_principals
+# }
+# output "user" {
+#   value = local.user_principals
+# }
+# output "role" {
+#   value = local.role_definitions
+# }
+output "assignments" {
+  value = local.assignments
 }
 
 # idea is a for_each on the local variable and create role assignments off that.
-# resource "azurerm_role_assignment" "roleAssignments" {
-#   scope = "requiredattr"
-#   principal_id = "requiredattr"
-# }
+resource "azurerm_role_assignment" "roleAssignments" {
+  for_each = local.assignments
 
-#temporary. to see what objects look like after locals block.
-output "group" {
-  value = local.group_principals
-}
-output "user" {
-  value = local.user_principals
-}
-output "role" {
-  value = local.role_definitions
+  principal_id = each.value.principal_name
+  scope = each.value.scope_id
+  role_definition_name = each.value.role_definition
 }
