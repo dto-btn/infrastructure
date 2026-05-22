@@ -62,7 +62,7 @@ variable "subscription_id" {
 
 variable "env_vars" {
   type        = map(string)
-  description = "A map of environment variables to pass to the container app"
+  description = "A map of environment variables to pass to the container image of the (template->container->env_var) container app"
   default     = {}
 }
 

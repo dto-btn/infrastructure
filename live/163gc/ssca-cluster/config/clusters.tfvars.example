@@ -1,0 +1,61 @@
+
+container_apps = {
+    mcp_server = {
+        config = {
+            name = "ssca-mcp-server"
+            revision_mode = "Single"
+            min_replicas  = 1
+        }
+        create_resource_group = bool
+        create_container_app_env = bool
+        env_vars = {
+            ENABLE_LLM_CLASSIFIER=true
+            ORCHESTRATOR_LLM_MODEL="gpt-4o"
+            ORCHESTRATOR_LLM_TIMEOUT_SECONDS=8.0
+            GPT40_DEPLOYMENT_NAME="gpt-4o"
+            DEFAULT_DEPLOYMENT_NAME="gpt-4o"
+            ORCHESTRATOR_MIN_CONFIDENCE=0.4
+            ORCHESTRATOR_ALLOWED_ORIGINS="https://assistant-dev.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca,https://assistant.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca"
+        }
+        acr_image = {
+            repo_name = "ssca-mcp-server"
+            tag = "1.0.1"
+        }
+        secrets = {
+            ORCHESTRATOR_LITELLM_PROXY_API_KEY=sk-"<INSERT_KEYHERE>"
+            AZURE_AD_CLIENT_ID=api://"<INSERT_ID_HERE>"
+            AZURE_AD_TENANT_ID="<INSERT_ID_HERE>"
+            AZURE_CLIENT_ID=5e945d23-"<INSERT_ID_HERE>"
+            AZURE_TENANT_ID="<INSERT_ID_HERE>"
+        }
+    }
+    litellm = {
+        config = {
+            name = "ssca-mcp-server"
+            revision_mode = "Single"
+            min_replicas  = 1
+        }
+        create_resource_group = bool
+        create_container_app_env = bool
+        env_vars = {
+            ENABLE_LLM_CLASSIFIER=true
+            ORCHESTRATOR_LLM_MODEL="gpt-4o"
+            ORCHESTRATOR_LLM_TIMEOUT_SECONDS=8.0
+            GPT40_DEPLOYMENT_NAME="gpt-4o"
+            DEFAULT_DEPLOYMENT_NAME="gpt-4o"
+            ORCHESTRATOR_MIN_CONFIDENCE=0.4
+            ORCHESTRATOR_ALLOWED_ORIGINS="https://assistant-dev.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca,https://assistant.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca"
+        }
+        acr_image = {
+            repo_name = "ssca-mcp-server"
+            tag = "1.0.1"
+        }
+        secrets = {
+            ORCHESTRATOR_LITELLM_PROXY_API_KEY=sk-"<INSERT_KEYHERE>"
+            AZURE_AD_CLIENT_ID=api://"<INSERT_ID_HERE>"
+            AZURE_AD_TENANT_ID="<INSERT_ID_HERE>"
+            AZURE_CLIENT_ID=5e945d23-"<INSERT_ID_HERE>"
+            AZURE_TENANT_ID="<INSERT_ID_HERE>"
+        }
+    }
+}
