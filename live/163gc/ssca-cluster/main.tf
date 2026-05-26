@@ -96,7 +96,7 @@ locals {
     for app_name, app in var.container_apps :
     app_name => merge(
       app,
-      app_name == "mcp_server" ? {
+      app_name == "orchestrator" ? {
         secrets = merge(
           app.secrets,
           {
@@ -110,7 +110,12 @@ locals {
 
 moved {
   from = module.dev
-  to   = module.container_apps["mcp_server"]
+  to   = module.container_apps["orchestrator"]
+}
+
+moved {
+  from = module.container_apps["mcp_server"]
+  to   = module.container_apps["orchestrator"]
 }
 
 moved {

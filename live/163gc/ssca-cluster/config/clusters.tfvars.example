@@ -1,6 +1,5 @@
-
 container_apps = {
-    mcp_server = {
+    orchestrator = {
         container_app = {
             name          = "ssca-mcp-server"
             revision_mode = "Single"
