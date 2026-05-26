@@ -4,6 +4,23 @@ resource "random_password" "litellm_db_password" {
   override_special = "!#-_" # Avoids characters that cause URL encoding issues
 }
 
+data "azurerm_key_vault" "kv" {
+  name                = "cio-ect-infra-kv"
+  resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
+}
+
+resource "azurerm_key_vault_secret" "litellm_db_password" {
+  name         = "litellm-db-password"
+  value        = random_password.litellm_db_password.result
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
+resource "azurerm_key_vault_secret" "litellm_database_url" {
+  name         = "litellm-database-url"
+  value        = "postgresql://${module.litellm_db.admin_user}:${urlencode(random_password.litellm_db_password.result)}@${module.litellm_db.fqdn}:5432/${module.litellm_db.database_name}?sslmode=require"
+  key_vault_id = data.azurerm_key_vault.kv.id
+}
+
 module "litellm_db" {
   source = "../../../modules/postgresql-flexible"
 
@@ -50,18 +67,17 @@ module "litellm_proxy" {
   }
 
   env_vars = {
-    "DATABASE_URL"        = "postgresql://${module.litellm_db.admin_user}:${urlencode(module.litellm_db.admin_password)}@${module.litellm_db.fqdn}:5432/${module.litellm_db.database_name}?sslmode=require"
     "DISABLE_ADMIN_UI"    = "False"
     LITELLM_DEFAULT_MODEL = "azure/gpt-4o"
     LITELLM_JSON_LOGS     = "true"
     LITELLM_LOG           = "INFO"
     UI_USERNAME           = "admin"
-    DISABLE_ADMIN_UI      = "False"
     AZURE_OPENAI_VERSION  = "2025-03-01-preview"
     CONFIG_FILE_PATH      = "/app/config/config.dev.yaml"
   }
 
   secrets = {
+    DATABASE_URL          = azurerm_key_vault_secret.litellm_database_url.name
     UI_PASSWORD           = "LiteLLM-UI-Password"
     AZURE_OPENAI_ENDPOINT = "Azure-OpenAI-Endpoint"
     LITELLM_MASTER_KEY    = "LiteLLM-Master-Key"

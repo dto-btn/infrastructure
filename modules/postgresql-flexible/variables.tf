@@ -17,6 +17,7 @@ variable "administrator_login" {
 variable "administrator_password" {
   type        = string
   description = "The administrator password for the PostgreSQL Flexible Server instance."
+  sensitive   = true
 }
 variable "postgresql_version" {
   default     = "16"
