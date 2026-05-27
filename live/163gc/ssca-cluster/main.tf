@@ -114,11 +114,6 @@ moved {
 }
 
 moved {
-  from = module.container_apps["mcp_server"]
-  to   = module.container_apps["orchestrator"]
-}
-
-moved {
   from = module.geds
   to   = module.container_apps["geds"]
 }
