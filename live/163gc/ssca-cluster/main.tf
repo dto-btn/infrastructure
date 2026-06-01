@@ -108,31 +108,6 @@ locals {
   }
 }
 
-moved {
-  from = module.dev
-  to   = module.container_apps["orchestrator"]
-}
-
-moved {
-  from = module.geds
-  to   = module.container_apps["geds"]
-}
-
-moved {
-  from = module.pmcoe
-  to   = module.container_apps["pmcoe"]
-}
-
-moved {
-  from = module.myssc
-  to   = module.container_apps["myssc"]
-}
-
-moved {
-  from = module.bits
-  to   = module.container_apps["bits"]
-}
-
 module "container_apps" {
   for_each = local.container_apps
   source   = "../../../modules/ssca-cluster"
