@@ -39,6 +39,11 @@ resource "azurerm_container_app" "containerApp" {
   resource_group_name          = local.rg_name
   revision_mode                = var.container_app.revision_mode
 
+  depends_on = [
+    azurerm_role_assignment.mcpImageIdentityRoleACRPull,
+    azurerm_role_assignment.container_app_kv_reader,
+  ]
+
   registry {
     identity = azurerm_user_assigned_identity.mcpImageIdentity.id
     server   = data.azurerm_container_registry.acr.login_server
