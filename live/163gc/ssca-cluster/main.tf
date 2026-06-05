@@ -4,6 +4,11 @@ resource "random_password" "litellm_db_password" {
   override_special = "!#-_" # Avoids characters that cause URL encoding issues
 }
 
+resource "azurerm_resource_group" "ssca_cluster" {
+  name     = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG"
+  location = "canadacentral"
+}
+
 data "azurerm_key_vault" "kv" {
   name                = "cio-ect-infra-kv"
   resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
@@ -25,19 +30,21 @@ module "litellm_db" {
   source = "../../../modules/postgresql-flexible"
 
   name                   = "ssca-litellm-db"
-  resource_group_name    = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG"
-  location               = "canadacentral"
+  resource_group_name    = azurerm_resource_group.ssca_cluster.name
+  location               = azurerm_resource_group.ssca_cluster.location
   administrator_login    = "litellmadmin"
   administrator_password = random_password.litellm_db_password.result
+
+  depends_on = [azurerm_resource_group.ssca_cluster]
 }
 
 module "litellm_proxy" {
   source = "../../../modules/ssca-cluster"
 
-  resource_group           = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG"
+  resource_group           = azurerm_resource_group.ssca_cluster.name
   create_resource_group    = false
-  create_container_app_env = false
-  location                 = "canadacentral"
+  create_container_app_env = true
+  location                 = azurerm_resource_group.ssca_cluster.location
   acr = {
     name                = "ectacr"
     resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
@@ -77,12 +84,19 @@ module "litellm_proxy" {
   }
 
   secrets = {
-    DATABASE_URL          = azurerm_key_vault_secret.litellm_database_url.name
+    DATABASE_URL          = "litellm-database-url"
     UI_PASSWORD           = "LiteLLM-UI-Password"
     AZURE_OPENAI_ENDPOINT = "Azure-OpenAI-Endpoint"
     LITELLM_MASTER_KEY    = "LiteLLM-Master-Key"
     OPENAI_API_KEY        = "OpenAI-API-Key"
   }
+
+  # Bootstrap dependencies first so secret references resolve before app revision creation.
+  depends_on = [
+    azurerm_resource_group.ssca_cluster,
+    module.litellm_db,
+    azurerm_key_vault_secret.litellm_database_url,
+  ]
 }
 
 locals {
@@ -97,8 +111,8 @@ locals {
     app_name => merge(
       app,
       app_name == "orchestrator" ? {
-        secrets = merge(
-          app.secrets,
+        env_vars = merge(
+          app.env_vars,
           {
             ORCHESTRATOR_LITELLM_PROXY_URL = "https://${module.litellm_proxy.fqdn}/v1"
           }
@@ -112,10 +126,10 @@ module "container_apps" {
   for_each = local.container_apps
   source   = "../../../modules/ssca-cluster"
 
-  resource_group           = "ScSc-CIO-ECT_SSCA_Cluster_Dev_RG"
-  create_resource_group    = each.value.create_resource_group
+  resource_group           = azurerm_resource_group.ssca_cluster.name
+  create_resource_group    = false
   create_container_app_env = each.value.create_container_app_env
-  location                 = "canadacentral"
+  location                 = azurerm_resource_group.ssca_cluster.location
 
   acr = {
     name                = "ectacr"
@@ -147,4 +161,6 @@ module "container_apps" {
 
   env_vars = each.value.env_vars
   secrets  = each.value.secrets
+
+  depends_on = [azurerm_resource_group.ssca_cluster, module.litellm_proxy]
 }

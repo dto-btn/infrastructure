@@ -42,6 +42,7 @@ resource "azurerm_container_app" "containerApp" {
   depends_on = [
     azurerm_role_assignment.mcpImageIdentityRoleACRPull,
     azurerm_role_assignment.container_app_kv_reader,
+    azurerm_key_vault_access_policy.container_app_kv_policy,
   ]
 
   registry {
