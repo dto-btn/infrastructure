@@ -6,10 +6,16 @@ data "azuread_application" "container_app_app_reg" {
   display_name = var.app_registration_name
 }
 
+data "azurerm_key_vault" "kv" {
+  count               = var.key_vault != null ? 1 : 0
+  name                = var.key_vault.name
+  resource_group_name = var.key_vault.resource_group_name
+}
+
 resource "azuread_application_password" "containerAppSecret" {
   application_id = data.azuread_application.container_app_app_reg.id
-  end_date = timeadd(timestamp(), "4320h") #180 days
-  display_name = "${var.container_app.name}-containerapp-secret"
+  end_date       = timeadd(timestamp(), "4320h") #180 days
+  display_name   = "${var.container_app.name}-containerapp-secret"
 }
 
 resource "azurerm_container_app_environment" "containerAppEnv" {
@@ -17,7 +23,7 @@ resource "azurerm_container_app_environment" "containerAppEnv" {
   name                       = var.container_app_environment_name
   location                   = local.rg_location
   resource_group_name        = local.rg_name
-  logs_destination          = "log-analytics"
+  logs_destination           = "log-analytics"
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logAnalytics.id
 }
 
@@ -32,6 +38,12 @@ resource "azurerm_container_app" "containerApp" {
   container_app_environment_id = local.cae_id
   resource_group_name          = local.rg_name
   revision_mode                = var.container_app.revision_mode
+
+  depends_on = [
+    azurerm_role_assignment.mcpImageIdentityRoleACRPull,
+    azurerm_role_assignment.container_app_kv_reader,
+    azurerm_key_vault_access_policy.container_app_kv_policy,
+  ]
 
   registry {
     identity = azurerm_user_assigned_identity.mcpImageIdentity.id
@@ -51,8 +63,10 @@ resource "azurerm_container_app" "containerApp" {
   dynamic "secret" {
     for_each = var.secrets
     content {
-      name  = lower(replace(secret.key, "_", "-"))
-      value = secret.value
+      name                = lower(replace(secret.key, "_", "-"))
+      key_vault_secret_id = var.key_vault != null ? "${data.azurerm_key_vault.kv[0].vault_uri}secrets/${secret.value}" : null
+      value               = var.key_vault == null ? secret.value : null
+      identity            = var.key_vault != null ? azurerm_user_assigned_identity.mcpImageIdentity.id : null
     }
   }
 
@@ -106,13 +120,13 @@ resource "azurerm_container_app" "containerApp" {
     transport                  = "auto"
     traffic_weight {
       latest_revision = true
-      percentage = 100
+      percentage      = 100
     }
     cors {
       allow_credentials_enabled = false
       allowed_headers           = ["*"]
-      allowed_methods           = []
-      allowed_origins           = ["http://localhost:8080"]
+      allowed_methods           = ["*"]
+      allowed_origins           = var.allowed_origins
       exposed_headers           = []
       max_age_in_seconds        = 0
     }
@@ -124,49 +138,49 @@ resource "azapi_resource_action" "container_app_auth_settings" {
     azurerm_container_app.containerApp, azuread_application_password.containerAppSecret
   ]
 
-  type      = "Microsoft.App/containerApps/authConfigs@2025-02-02-preview"
+  type        = "Microsoft.App/containerApps/authConfigs@2025-02-02-preview"
   resource_id = "${azurerm_container_app.containerApp.id}/authConfigs/current"
 
-  method = "PUT" 
+  method = "PUT"
 
   body = {
-    properties: {
-          platform: {
-              enabled: true
+    properties : {
+      platform : {
+        enabled : true
+      },
+      globalValidation : {
+        unauthenticatedClientAction : var.unauthenticated_access ? "AllowAnonymous" : "RedirectToLoginPage",
+        redirectToProvider : "azureactivedirectory",
+        excludedPaths : []
+      },
+      identityProviders : {
+        azureActiveDirectory : {
+          registration : {
+            openIdIssuer : "https://sts.windows.net/${data.azurerm_subscription.current.tenant_id}/v2.0",
+            clientId : data.azuread_application.container_app_app_reg.client_id,
+            clientSecretSettingName : "microsoft-provider-authentication-secret"
           },
-          globalValidation: {
-              unauthenticatedClientAction: "RedirectToLoginPage",
-              redirectToProvider: "azureactivedirectory",
-              excludedPaths: []
+          validation : {
+            allowedAudiences : [
+              "api://${data.azuread_application.container_app_app_reg.client_id}"
+            ],
+            defaultAuthorizationPolicy : {
+              allowedPrincipals : {},
+              allowedApplications : [
+                "${data.azuread_application.container_app_app_reg.client_id}"
+              ]
+            }
           },
-          identityProviders: {
-              azureActiveDirectory: {
-                  registration: {
-                      openIdIssuer: "https://sts.windows.net/${data.azurerm_subscription.current.tenant_id}/v2.0",
-                      clientId: data.azuread_application.container_app_app_reg.client_id,
-                      clientSecretSettingName: "microsoft-provider-authentication-secret"
-                  },
-                  validation: {
-                      allowedAudiences: [
-                          "api://${data.azuread_application.container_app_app_reg.client_id}"
-                      ],
-                      defaultAuthorizationPolicy: {
-                          allowedPrincipals: {},
-                          allowedApplications: [
-                              "${data.azuread_application.container_app_app_reg.client_id}"
-                          ]
-                      }
-                  },
-                  isAutoProvisioned: false
-              }
-          },
-          login: {
-              routes: {},
-              preserveUrlFragmentsForLogins: false,
-              cookieExpiration: {},
-              nonce: {}
-          },
-          encryptionSettings: {}
+          isAutoProvisioned : false
+        }
+      },
+      login : {
+        routes : {},
+        preserveUrlFragmentsForLogins : false,
+        cookieExpiration : {},
+        nonce : {}
+      },
+      encryptionSettings : {}
     }
   }
 }
