@@ -9,7 +9,7 @@ container_apps = {
     }
     acr_image = {
       repo_name = "ssca-mcp-server"
-      tag       = "1.0.3"
+      tag       = "1.0.4"
     }
     env_vars = {
       ENABLE_LLM_CLASSIFIER            = "true"
@@ -93,7 +93,7 @@ container_apps = {
       tag       = "1.0.0"
     }
     env_vars = {
-      AZURE_SEARCH_INDEX_NAME      = "current"
+      AZURE_SEARCH_INDEX_NAME      = "digitaltransformationprocessimprovement"
       AZURE_SEARCH_KEY_FIELD       = "id"
       AZURE_SEARCH_CONTENT_FIELD   = "chunk"
       AZURE_SEARCH_SEMANTIC_CONFIG = "mySemanticConfig"
