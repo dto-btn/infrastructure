@@ -33,7 +33,7 @@ container_apps = {
     create_resource_group    = false
     create_container_app_env = false
     container_app = {
-      name          = "ssca-mcp-server_prod"
+      name          = "ssca-mcp-server-prod"
       revision_mode = "Single"
       min_replicas  = 1
     }
