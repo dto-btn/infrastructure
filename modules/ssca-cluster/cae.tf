@@ -16,6 +16,11 @@ resource "azuread_application_password" "containerAppSecret" {
   application_id = data.azuread_application.container_app_app_reg.id
   end_date       = timeadd(timestamp(), "4320h") #180 days
   display_name   = "${var.container_app.name}-containerapp-secret"
+
+  #adding this to ensure no force replacements on existing resources.
+  lifecycle {
+    ignore_changes = [end_date]
+  }
 }
 
 resource "azurerm_container_app_environment" "containerAppEnv" {
@@ -106,6 +111,7 @@ resource "azurerm_container_app" "containerApp" {
       startup_probe {
         transport = "TCP"
         port      = var.container_app.target_port
+        initial_delay = try(var.container_app.startup_probe_initial_delay, 0)
       }
     }
 

@@ -6,6 +6,7 @@ container_apps = {
       name          = "ssca-mcp-server"
       revision_mode = "Single"
       min_replicas  = 1
+      startup_probe_initial_delay = 1
     }
     acr_image = {
       repo_name = "ssca-mcp-server"
@@ -117,6 +118,7 @@ container_apps = {
       name          = "myssc-mcp"
       revision_mode = "Single"
       min_replicas  = 1
+      startup_probe_initial_delay = 1
     }
     acr_image = {
       repo_name = "azure-search-mcp"
