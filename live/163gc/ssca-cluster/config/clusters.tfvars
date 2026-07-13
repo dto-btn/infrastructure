@@ -49,7 +49,7 @@ container_apps = {
       GPT40_DEPLOYMENT_NAME            = "gpt-4o"
       DEFAULT_DEPLOYMENT_NAME          = "gpt-4o"
       ORCHESTRATOR_MIN_CONFIDENCE      = "0.4"
-      ORCHESTRATOR_ALLOWED_ORIGINS     = "https://assistant-dev.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca,https://assistant.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca"
+      ORCHESTRATOR_ALLOWED_ORIGINS     = "https://assistant-dev.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca,https://assistant.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca,https://assistant.ssc-spc.gc.ca/"
     }
     secrets = {
       ORCHESTRATOR_LITELLM_PROXY_API_KEY = "ORCHESTRATOR-LITELLM-PROXY-API-KEY"
