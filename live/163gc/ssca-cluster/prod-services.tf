@@ -1,3 +1,6 @@
+# Prod copies of litellm_db litellm_proxy and orchestrato
+# to be moved to it's own env at a later date.
+
 module "litellm_db_prod" {
   source = "../../../modules/postgresql-flexible"
 
@@ -15,7 +18,7 @@ module "litellm_proxy_prod" {
 
   resource_group           = azurerm_resource_group.ssca_cluster.name
   create_resource_group    = false
-  create_container_app_env = true
+  create_container_app_env = false
   location                 = azurerm_resource_group.ssca_cluster.location
   acr = {
     name                = "ectacr"
