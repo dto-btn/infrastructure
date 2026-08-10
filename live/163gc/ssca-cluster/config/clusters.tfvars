@@ -37,6 +37,7 @@ container_apps = {
       name          = "ssca-mcp-server-prod"
       revision_mode = "Single"
       min_replicas  = 1
+      app_registration_name = "SSC-Assistant"
     }
     acr_image = {
       repo_name = "ssca-mcp-server"
