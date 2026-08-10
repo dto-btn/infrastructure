@@ -110,11 +110,11 @@ locals {
     for app_name, app in var.container_apps :
     app_name => merge(
       app,
-      app_name == "orchestrator" ? {
+      (app_name == "orchestrator" || app_name == "orchestrator_prod") ? {
         env_vars = merge(
           app.env_vars,
           {
-            ORCHESTRATOR_LITELLM_PROXY_URL = "https://${module.litellm_proxy.fqdn}/v1"
+            ORCHESTRATOR_LITELLM_PROXY_URL = app_name == "orchestrator_prod" ? "https://${module.litellm_proxy_prod.fqdn}/v1" : "https://${module.litellm_proxy.fqdn}/v1"
           }
         )
       } : {}
@@ -148,7 +148,7 @@ module "container_apps" {
   container_app_environment_name = "ssca-cae"
   container_app                  = each.value.container_app
   subscription_id                = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
-  app_registration_name          = "SSC-Assistant-Dev"
+  app_registration_name          = each.value.container_app.app_registration_name != null ? each.value.container_app.app_registration_name : "SSC-Assistant-Dev"
 
   allowed_origins = each.value.allowed_origins != null ? each.value.allowed_origins : local.default_allowed_origins
 
@@ -162,5 +162,5 @@ module "container_apps" {
   env_vars = each.value.env_vars
   secrets  = each.value.secrets
 
-  depends_on = [azurerm_resource_group.ssca_cluster, module.litellm_proxy]
+  depends_on = [azurerm_resource_group.ssca_cluster, module.litellm_proxy, module.litellm_proxy_prod]
 }
