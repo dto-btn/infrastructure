@@ -54,6 +54,9 @@ variable "container_app" {
 }
 
 variable "app_registration_name" {
+  # Each env (front-end, backend, container apps) all use one app reg as of writing this.
+  # If more than one app reg needs to be recognized by this easy auth, add them into allowedAudience and allowedPrinciple. 
+  description = "App registration to be used with container app's built in authentication (EasyAuth)"
   type = string
 }
 
