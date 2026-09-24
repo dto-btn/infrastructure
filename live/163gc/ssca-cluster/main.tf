@@ -66,7 +66,7 @@ module "litellm_proxy" {
   }
   subscription_id        = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
   app_registration_name  = "SSC-Assistant-Dev"
-  unauthenticated_access = true # Set to false for proxy because authentication is handled at the app level
+  unauthenticated_access = false
 
   key_vault = {
     name                = "cio-ect-infra-kv"
