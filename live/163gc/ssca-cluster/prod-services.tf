@@ -25,7 +25,7 @@ module "litellm_proxy_prod" {
     resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
     image = {
       repo_name = "litellm-proxy"
-      tag       = "1.0.1"
+      tag       = "1.0.2"
     }
   }
   log_analytics = {

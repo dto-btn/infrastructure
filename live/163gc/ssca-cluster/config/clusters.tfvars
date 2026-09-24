@@ -10,7 +10,7 @@ container_apps = {
     }
     acr_image = {
       repo_name = "ssca-mcp-server"
-      tag       = "1.0.4"
+      tag       = "1.0.5"
     }
     env_vars = {
       ENABLE_LLM_CLASSIFIER            = "true"
@@ -41,7 +41,7 @@ container_apps = {
     }
     acr_image = {
       repo_name = "ssca-mcp-server"
-      tag       = "1.0.4"
+      tag       = "1.0.5"
     }
     env_vars = {
       ENABLE_LLM_CLASSIFIER            = "true"
