@@ -49,13 +49,14 @@ module "litellm_proxy_prod" {
   }
 
   env_vars = {
-    "DISABLE_ADMIN_UI"    = "False"
-    LITELLM_DEFAULT_MODEL = "azure/gpt-4o"
-    LITELLM_JSON_LOGS     = "true"
-    LITELLM_LOG           = "INFO"
-    UI_USERNAME           = "admin"
-    AZURE_OPENAI_VERSION  = "2025-03-01-preview"
-    CONFIG_FILE_PATH      = "/app/config/config.dev.yaml"
+    DISABLE_ADMIN_UI        = "False"
+    LITELLM_DEFAULT_MODEL   = "azure/gpt-4o"
+    LITELLM_JSON_LOGS       = "true"
+    LITELLM_LOG             = "INFO"
+    UI_USERNAME             = "admin"
+    AZURE_OPENAI_VERSION    = "2025-03-01-preview"
+    CONFIG_FILE_PATH        = "/app/config/config.dev.yaml"
+    TRUST_EASY_AUTH_HEADERS = "true"
   }
 
   secrets = {
@@ -64,6 +65,8 @@ module "litellm_proxy_prod" {
     AZURE_OPENAI_ENDPOINT = "Azure-OpenAI-Endpoint"
     LITELLM_MASTER_KEY    = "LiteLLM-Master-Key"
     OPENAI_API_KEY        = "OpenAI-API-Key"
+    AZURE_AD_CLIENT_ID    = "Azure-AD-Client-ID"
+    AZURE_AD_TENANT_ID    = "Azure-AD-Tenant-ID"
   }
 
   # Bootstrap dependencies first so secret references resolve before app revision creation.

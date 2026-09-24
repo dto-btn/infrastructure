@@ -1,11 +1,11 @@
 variable "container_apps" {
   type = map(object({
     container_app = object({
-      name          = string
-      revision_mode = string
-      app_registration_name = optional(string, null)
-      min_replicas  = optional(number, 0)
-      target_port   = optional(number, 8000)
+      name                        = string
+      revision_mode               = string
+      app_registration_name       = optional(string, null)
+      min_replicas                = optional(number, 0)
+      target_port                 = optional(number, 8000)
       startup_probe_initial_delay = optional(number, 0)
     })
     create_resource_group    = optional(bool, false)
