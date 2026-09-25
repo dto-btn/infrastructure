@@ -50,7 +50,7 @@ module "litellm_proxy" {
     resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
     image = {
       repo_name = "litellm-proxy"
-      tag       = "1.0.1"
+      tag       = "1.0.2"
     }
   }
   log_analytics = {
@@ -66,7 +66,7 @@ module "litellm_proxy" {
   }
   subscription_id        = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
   app_registration_name  = "SSC-Assistant-Dev"
-  unauthenticated_access = true # Set to false for proxy because authentication is handled at the app level
+  unauthenticated_access = false
 
   key_vault = {
     name                = "cio-ect-infra-kv"
@@ -74,13 +74,14 @@ module "litellm_proxy" {
   }
 
   env_vars = {
-    "DISABLE_ADMIN_UI"    = "False"
-    LITELLM_DEFAULT_MODEL = "azure/gpt-4o"
-    LITELLM_JSON_LOGS     = "true"
-    LITELLM_LOG           = "INFO"
-    UI_USERNAME           = "admin"
-    AZURE_OPENAI_VERSION  = "2025-03-01-preview"
-    CONFIG_FILE_PATH      = "/app/config/config.dev.yaml"
+    DISABLE_ADMIN_UI        = "False"
+    LITELLM_DEFAULT_MODEL   = "azure/gpt-4o"
+    LITELLM_JSON_LOGS       = "true"
+    LITELLM_LOG             = "INFO"
+    UI_USERNAME             = "admin"
+    AZURE_OPENAI_VERSION    = "2025-03-01-preview"
+    CONFIG_FILE_PATH        = "/app/config/config.dev.yaml"
+    TRUST_EASY_AUTH_HEADERS = "true"
   }
 
   secrets = {
@@ -89,6 +90,8 @@ module "litellm_proxy" {
     AZURE_OPENAI_ENDPOINT = "Azure-OpenAI-Endpoint"
     LITELLM_MASTER_KEY    = "LiteLLM-Master-Key"
     OPENAI_API_KEY        = "OpenAI-API-Key"
+    AZURE_AD_CLIENT_ID    = "Azure-AD-Client-ID"
+    AZURE_AD_TENANT_ID    = "Azure-AD-Tenant-ID"
   }
 
   # Bootstrap dependencies first so secret references resolve before app revision creation.

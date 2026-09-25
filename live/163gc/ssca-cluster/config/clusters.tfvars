@@ -10,7 +10,7 @@ container_apps = {
     }
     acr_image = {
       repo_name = "ssca-mcp-server"
-      tag       = "1.0.4"
+      tag       = "1.0.5"
     }
     env_vars = {
       ENABLE_LLM_CLASSIFIER            = "true"
@@ -22,11 +22,12 @@ container_apps = {
       ORCHESTRATOR_ALLOWED_ORIGINS     = "https://assistant-dev.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca,https://assistant.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca"
     }
     secrets = {
-      ORCHESTRATOR_LITELLM_PROXY_API_KEY = "ORCHESTRATOR-LITELLM-PROXY-API-KEY"
       AZURE_AD_CLIENT_ID                 = "Azure-AD-Client-ID"
       AZURE_AD_TENANT_ID                 = "Azure-AD-Tenant-ID"
       AZURE_CLIENT_ID                    = "Azure-Client-ID"
       AZURE_TENANT_ID                    = "Azure-Tenant-ID"
+      ORCHESTRATOR_LITELLM_SCOPE         = "Orchestrator-LiteLLM-Scope-DEV"
+      AZURE_CLIENT_SECRET                = "Azure-Client-Secret-DEV"
     }
   }
 
@@ -41,7 +42,7 @@ container_apps = {
     }
     acr_image = {
       repo_name = "ssca-mcp-server"
-      tag       = "1.0.4"
+      tag       = "1.0.5"
     }
     env_vars = {
       ENABLE_LLM_CLASSIFIER            = "true"
@@ -53,11 +54,12 @@ container_apps = {
       ORCHESTRATOR_ALLOWED_ORIGINS     = "https://assistant-dev.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca,https://assistant.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca,https://assistant.ssc-spc.gc.ca/"
     }
     secrets = {
-      ORCHESTRATOR_LITELLM_PROXY_API_KEY = "ORCHESTRATOR-LITELLM-PROXY-API-KEY"
       AZURE_AD_CLIENT_ID                 = "Azure-AD-Client-ID"
       AZURE_AD_TENANT_ID                 = "Azure-AD-Tenant-ID"
       AZURE_CLIENT_ID                    = "Azure-Client-ID"
       AZURE_TENANT_ID                    = "Azure-Tenant-ID"
+      ORCHESTRATOR_LITELLM_SCOPE         = "Orchestrator-LiteLLM-Scope-PROD"
+      AZURE_CLIENT_SECRET                = "Azure-Client-Secret-PROD"
     }
   }
 
