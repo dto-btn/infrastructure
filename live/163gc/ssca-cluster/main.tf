@@ -50,7 +50,7 @@ module "litellm_proxy" {
     resource_group_name = "ScSc-CIO_ECT_Infrastructure-rg"
     image = {
       repo_name = "litellm-proxy"
-      tag       = "1.0.2"
+      tag       = "1.0.3"
     }
   }
   log_analytics = {
@@ -80,7 +80,7 @@ module "litellm_proxy" {
     LITELLM_LOG             = "INFO"
     UI_USERNAME             = "admin"
     AZURE_OPENAI_VERSION    = "2025-03-01-preview"
-    CONFIG_FILE_PATH        = "/app/config/config.dev.yaml"
+    CONFIG_FILE_PATH        = "/app/config/config.prod.yaml"
     TRUST_EASY_AUTH_HEADERS = "true"
   }
 
