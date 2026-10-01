@@ -94,6 +94,8 @@ module "litellm_proxy" {
     AZURE_AD_TENANT_ID    = "Azure-AD-Tenant-ID"
   }
 
+  allowed_origins = ["https://assistant-dev.cio-sandbox-ect.ssc-spc.cloud-nuage.canada.ca"]
+
   # Bootstrap dependencies first so secret references resolve before app revision creation.
   depends_on = [
     azurerm_resource_group.ssca_cluster,
