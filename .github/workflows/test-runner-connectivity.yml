@@ -1,0 +1,24 @@
+name: Test Runner Connectivity
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner_group:
+        description: Runner group to target
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  test-connectivity:
+    runs-on:
+      group: ${{ inputs.runner_group }}
+    timeout-minutes: 5
+    steps:
+      - name: Confirm runner connectivity
+        shell: bash
+        run: |
+          printf 'Runner connected and executing jobs successfully.\n'
+          printf 'Runner: %s\nOS: %s\nArchitecture: %s\n' \
+            "$RUNNER_NAME" "$RUNNER_OS" "$RUNNER_ARCH"
