@@ -1,5 +1,7 @@
 name: Test Runner Connectivity
 
+#this is just to test connection to arc runner on aks.  delete after
+
 on:
   workflow_dispatch:
     inputs:
