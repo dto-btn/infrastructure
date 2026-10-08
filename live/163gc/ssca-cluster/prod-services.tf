@@ -55,7 +55,7 @@ module "litellm_proxy_prod" {
     LITELLM_LOG           = "INFO"
     UI_USERNAME           = "admin"
     AZURE_OPENAI_VERSION  = "2025-03-01-preview"
-    CONFIG_FILE_PATH      = "/app/config/config.dev.yaml"
+    CONFIG_FILE_PATH      = "/app/config/config.prod.yaml"
     # TRUST_EASY_AUTH_HEADERS = "true"
   }
 
