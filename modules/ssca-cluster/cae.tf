@@ -162,7 +162,7 @@ resource "azapi_resource_action" "container_app_auth_settings" {
       identityProviders : {
         azureActiveDirectory : {
           registration : {
-            openIdIssuer : "https://sts.windows.net/${data.azurerm_subscription.current.tenant_id}/v2.0",
+            openIdIssuer : try(data.azuread_application.container_app_app_reg.api[0].requested_access_token_version, null) == 2 ? "https://login.microsoftonline.com/${data.azurerm_subscription.current.tenant_id}/v2.0" : "https://sts.windows.net/${data.azurerm_subscription.current.tenant_id}/",
             clientId : data.azuread_application.container_app_app_reg.client_id,
             clientSecretSettingName : "microsoft-provider-authentication-secret"
           },
