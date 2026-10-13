@@ -18,5 +18,6 @@ variable "container_apps" {
     secrets                = optional(map(string), {})
     allowed_origins        = optional(list(string), null)
     unauthenticated_access = optional(bool, false)
+    additional_app_registration_client_ids = optional(list(string), [])
   }))
 }

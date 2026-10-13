@@ -155,6 +155,8 @@ module "container_apps" {
   subscription_id                = "f5fb90f1-6d1e-4a21-8935-6968d811afd8"
   app_registration_name          = each.value.container_app.app_registration_name != null ? each.value.container_app.app_registration_name : "SSC-Assistant-Dev"
 
+  additional_app_registration_client_ids = each.value.additional_app_registration_client_ids
+
   allowed_origins = each.value.allowed_origins != null ? each.value.allowed_origins : local.default_allowed_origins
 
   unauthenticated_access = each.value.unauthenticated_access
