@@ -167,14 +167,16 @@ resource "azapi_resource_action" "container_app_auth_settings" {
             clientSecretSettingName : "microsoft-provider-authentication-secret"
           },
           validation : {
-            allowedAudiences : [
-              "api://${data.azuread_application.container_app_app_reg.client_id}"
-            ],
+            allowedAudiences : distinct(concat(
+              ["api://${data.azuread_application.container_app_app_reg.client_id}"],
+              [for client_id in var.additional_app_registration_client_ids : "api://${client_id}"]
+            )),
             defaultAuthorizationPolicy : {
               allowedPrincipals : {},
-              allowedApplications : [
-                "${data.azuread_application.container_app_app_reg.client_id}"
-              ]
+              allowedApplications : distinct(concat(
+                [data.azuread_application.container_app_app_reg.client_id],
+                var.additional_app_registration_client_ids
+              ))
             }
           },
           isAutoProvisioned : false

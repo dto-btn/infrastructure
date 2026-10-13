@@ -65,6 +65,7 @@ container_apps = {
   }
 
   geds = {
+    additional_app_registration_client_ids = ["fa97a723-f604-438b-8bd6-06543065f6a9"]
     create_resource_group    = false
     create_container_app_env = false
     container_app = {
@@ -87,6 +88,7 @@ container_apps = {
   }
 
   pmcoe = {
+    additional_app_registration_client_ids = ["fa97a723-f604-438b-8bd6-06543065f6a9"]
     create_resource_group    = false
     create_container_app_env = false
     container_app = {
@@ -116,6 +118,7 @@ container_apps = {
   }
 
   myssc = {
+    additional_app_registration_client_ids = ["fa97a723-f604-438b-8bd6-06543065f6a9"]
     create_resource_group    = false
     create_container_app_env = false
     container_app = {
@@ -145,6 +148,7 @@ container_apps = {
   }
 
   bits = {
+    additional_app_registration_client_ids = ["fa97a723-f604-438b-8bd6-06543065f6a9"]
     create_resource_group    = false
     create_container_app_env = false
     container_app = {
